@@ -11,6 +11,10 @@ class DotamaxSpider(scrapy.Spider):
             'body > div.maxtopbar > div.main-shadow-box > '
             'div.main-container > div.container.xuning-box > '
             'table > tbody > tr::attr(onclick)').extract()
+        hero_real_name = response.css(
+            'body > div.maxtopbar > div.main-shadow-box > '
+            'div.main-container > div.container.xuning-box > '
+            'table > tbody > tr > td:nth-child(1) > span::text').extract()
         win_rate = response.css(
             'body > div.maxtopbar > div.main-shadow-box > '
             'div.main-container > div.container.xuning-box > '
@@ -24,11 +28,13 @@ class DotamaxSpider(scrapy.Spider):
                 replace('%;', '')
             request = response.follow(anti_url, callback=self.parse_hero_anti)
             request.meta['hero_name'] = hero_name
+            request.meta['hero_real_name'] = hero_real_name[idx]
             request.meta['win_rate'] = float(_wr)
             yield request
 
     def parse_hero_anti(self, response):
         hero_name = response.meta['hero_name']
+        hero_real_name = response.meta['hero_real_name']
         win_rate = response.meta['win_rate']
         anti_index = response.css(
             'body > div.maxtopbar > div.main-shadow-box > '
@@ -46,6 +52,7 @@ class DotamaxSpider(scrapy.Spider):
             anti[anti_hero_name] = float(anti_index[idx].replace('%', ''))
         yield {
             'hero_name': hero_name,
+            'hero_real_name': hero_real_name,
             'win_rate': win_rate,
             'anti': anti
         }
