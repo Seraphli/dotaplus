@@ -2,7 +2,7 @@ import scrapy
 
 
 class NameDictSpider(scrapy.Spider):
-    name = 'namedict'
+    name = 'name_dict'
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
@@ -30,7 +30,7 @@ class NameDictSpider(scrapy.Spider):
 
 
 class WinRateSpider(scrapy.Spider):
-    name = 'winrate'
+    name = 'win_rate'
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
@@ -60,7 +60,7 @@ class WinRateSpider(scrapy.Spider):
 
 
 class MatchUpsSpider(scrapy.Spider):
-    name = 'matchups'
+    name = 'match_ups'
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {

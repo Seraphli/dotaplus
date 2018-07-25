@@ -1,17 +1,15 @@
 import json
 
-with open('scrapy/dotaplus/heroes.json', 'r') as f:
-    heroes = json.load(f)
+with open('data.json', 'r') as f:
+    data = json.load(f)
 
 h_wr = []
-name_dict = {}
-for h in heroes:
-    h_wr.append([h['hero_real_name'], h['win_rate']])
-    name_dict[h['hero_name']] = h['hero_real_name']
+for h in data:
+    h_wr.append([h, data[h]['win_rate']])
 
 h_wr = sorted(h_wr, key=lambda x: x[1], reverse=True)
 for i in range(10):
-    print(h_wr[i][0], h_wr[i][1])
+    print(data[h_wr[i][0]]['name'], h_wr[i][1])
 
 print()
 
@@ -19,12 +17,13 @@ match_ups = []
 teammates = []
 
 match_up = 'Broodmother'
-anti = [h for h in heroes if h['hero_real_name'] == match_up][0]['anti']
+h_n = [h for h in data if data[h]['name'] == match_up][0]
+_match_ups = data[h_n]['match_ups']
 
-h_anti = []
-for h, ai in anti.items():
-    h_anti.append([h, ai])
+h_match_ups = []
+for h, ai in _match_ups.items():
+    h_match_ups.append([h, ai])
 
-h_anti = sorted(h_anti, key=lambda x: x[1], reverse=True)
+h_anti = sorted(h_match_ups, key=lambda x: x[1], reverse=True)
 for i in range(10):
-    print(name_dict[h_anti[i][0]], h_anti[i][1])
+    print(data[h_anti[i][0]]['name'], h_anti[i][1])

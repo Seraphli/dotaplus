@@ -38,8 +38,19 @@ def crawl(spiders):
 
 
 def process_data(raw_data):
-    # TODO: process data
-    pass
+    data = {}
+    for nd in raw_data['name_dict']:
+        data[nd['hero_name']] = {
+            'name': nd['hero_real_name'],
+        }
+    for wr in raw_data['win_rate']:
+        data[wr['hero_name']]['win_rate'] = wr['win_rate']
+    for mu in raw_data['match_ups']:
+        data[mu['hero_name']]['match_ups'] = mu['match_ups']
+    for tm in raw_data['teammates']:
+        data[tm['hero_name']]['teammates'] = tm['teammates']
+    with open('data.json', 'w') as f:
+        json.dump(data, f)
 
 
 def main():
