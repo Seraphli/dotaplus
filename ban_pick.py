@@ -33,9 +33,9 @@ class BanPick(object):
             table.append([self.data[h][name_key]])
         self.print_table(table, ['Name'])
 
-    def print_table(self, table, headers):
+    def print_table(self, table, headers, floatfmt='.2f'):
         print(tabulate(table, headers=headers, tablefmt='psql',
-                       floatfmt='.2f', showindex='always'))
+                       floatfmt=floatfmt, showindex='always'))
 
     def apply_factor(self, h_v, sorted_list, f=1.0):
         h_v = copy.deepcopy(h_v)
@@ -185,7 +185,7 @@ class BanPick(object):
         _ours_score = sum(ours_score) / len(ours_score)
         wr = _ours_score / (_ours_score + _theirs_score)
         table.append([wr_text, wr])
-        self.print_table(table, headers=['Name', 'Value'])
+        self.print_table(table, headers=['Name', 'Value'], floatfmt='.4f')
         return theirs_score, ours_score, wr
 
 
