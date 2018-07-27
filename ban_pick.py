@@ -132,7 +132,7 @@ class BanPick(object):
 
         self.print_v_list(lang=lang)
 
-    def recommend(self, match_ups, teammates, lang=Language.EN):
+    def cal_match(self, match_ups, teammates):
         _h_v = copy.deepcopy(self.h_v)
         for mu in match_ups:
             mu_index = []
@@ -155,11 +155,38 @@ class BanPick(object):
                 tm_index.append([_tm, self.data[tm]['match_ups'][_tm]])
             tm_index = sorted(tm_index, key=lambda x: x[1])
             _h_v = self.apply_factor(_h_v, tm_index, 0.8)
+        return _h_v
 
+    def recommend(self, match_ups, teammates, lang=Language.EN):
+        _h_v = self.cal_match(match_ups, teammates)
         exclude = []
         exclude.extend(match_ups)
         exclude.extend(teammates)
         self.print_v_list(exclude=exclude, h_v=_h_v, lang=lang)
+
+    def win_rate(self, match_ups, teammates, lang=Language.EN):
+        if lang == Language.CN:
+            name_key = 'cn_name'
+            wr_text = 'Win Rate'
+        else:
+            name_key = 'name'
+            wr_text = '胜率'
+        _h_v = self.cal_match(match_ups, teammates)
+        table = []
+        theirs_score = []
+        for mu in match_ups:
+            theirs_score.append(_h_v[mu])
+            table.append([self.data[mu][name_key], _h_v[mu]])
+        _theirs_score = sum(theirs_score) / len(theirs_score)
+        ours_score = []
+        for tm in teammates:
+            ours_score.append(_h_v[tm])
+            table.append([self.data[tm][name_key], _h_v[tm]])
+        _ours_score = sum(ours_score) / len(ours_score)
+        wr = _ours_score / (_ours_score + _theirs_score)
+        table.append([wr_text, wr])
+        self.print_table(table, headers=['Name', 'Value'])
+        return theirs_score, ours_score, wr
 
 
 def main():
@@ -185,6 +212,26 @@ def main():
                   CNHeroes.先知,
                   CNHeroes.巫妖,
                   CNHeroes.斯拉达], lang=lang)
+    bp.win_rate([CNHeroes.水晶室女,
+                 CNHeroes.莉娜,
+                 CNHeroes.嗜血狂魔,
+                 CNHeroes.蝙蝠骑士,
+                 CNHeroes.司夜刺客],
+                [CNHeroes.巨魔战将,
+                 CNHeroes.先知,
+                 CNHeroes.巫妖,
+                 CNHeroes.斯拉达,
+                 CNHeroes.噬魂鬼], lang=lang)
+    bp.win_rate([CNHeroes.末日使者,
+                 CNHeroes.主宰,
+                 CNHeroes.沉默术士,
+                 CNHeroes.水晶室女,
+                 CNHeroes.炼金术士],
+                [CNHeroes.冥魂大帝,
+                 CNHeroes.莱恩,
+                 CNHeroes.钢背兽,
+                 CNHeroes.斯拉达,
+                 CNHeroes.宙斯], lang=lang)
 
 
 if __name__ == '__main__':
