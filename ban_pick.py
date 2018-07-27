@@ -167,10 +167,10 @@ class BanPick(object):
     def win_rate(self, match_ups, teammates, lang=Language.EN):
         if lang == Language.CN:
             name_key = 'cn_name'
-            wr_text = 'Win Rate'
+            wr_text = '胜率'
         else:
             name_key = 'name'
-            wr_text = '胜率'
+            wr_text = 'Win rate'
         _h_v = self.cal_match(match_ups, teammates)
         table = []
         theirs_score = []
