@@ -53,7 +53,6 @@ def print_v_list(exclude=None):
 
 
 def recommend(match_ups, teammates):
-    # TODO: recommend by game
     _list = []
     for mu in match_ups:
         _list.append([h for h in data if data[h]['name'] == mu][0])
