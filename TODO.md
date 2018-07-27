@@ -1,2 +1,6 @@
-1. actual name and href
-2. delete json first and modify json after generation
+- [x] actual name and href
+- [x] delete json first and modify json after generation
+- [ ] gui interface for ban pick
+- [x] heroes' chinese name and abbreviation
+- [ ] heroes' abbreviation
+- [x] auto generate hero name dict py script when getting data

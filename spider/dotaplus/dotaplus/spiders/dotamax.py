@@ -29,6 +29,38 @@ class NameDictSpider(scrapy.Spider):
             }
 
 
+class CNNameDictSpider(scrapy.Spider):
+    name = 'cn_name_dict'
+    allowed_domains = ['www.dotamax.com']
+    start_urls = ['http://www.dotamax.com/hero/rate/']
+    custom_settings = {
+        'LOG_ENABLED': False,
+        'FEED_FORMAT': 'json',
+        'FEED_URI': 'cn_name_dict_raw.json',
+        'DEFAULT_REQUEST_HEADERS': {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Language': 'zh-CN'
+        }
+    }
+
+    def parse(self, response):
+        hero = response.css(
+            'body > div.maxtopbar > div.main-shadow-box > '
+            'div.main-container > div.container.xuning-box > '
+            'table > tbody > tr::attr(onclick)').extract()
+        hero_real_name = response.css(
+            'body > div.maxtopbar > div.main-shadow-box > '
+            'div.main-container > div.container.xuning-box > '
+            'table > tbody > tr > td:nth-child(1) > span::text').extract()
+        for idx, h in enumerate(hero):
+            url = h.replace('DoNav(\'', '').replace('\')', '')
+            hero_name = url.replace('/hero/detail/', '')
+            yield {
+                'hero_name': hero_name,
+                'hero_real_name': hero_real_name[idx],
+            }
+
+
 class WinRateSpider(scrapy.Spider):
     name = 'win_rate'
     allowed_domains = ['www.dotamax.com']

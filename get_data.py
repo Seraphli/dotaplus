@@ -1,10 +1,11 @@
 from util import get_path
 import os
 import json
+import codecs
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from spider.dotaplus.dotaplus.spiders.dotamax import NameDictSpider, \
-    WinRateSpider, MatchUpsSpider, TeammatesSpider
+    CNNameDictSpider, WinRateSpider, MatchUpsSpider, TeammatesSpider
 
 
 def remove_json(file_names):
@@ -43,6 +44,8 @@ def process_data(raw_data):
         data[nd['hero_name']] = {
             'name': nd['hero_real_name'],
         }
+    for nd in raw_data['cn_name_dict']:
+        data[nd['hero_name']]['cn_name'] = nd['hero_real_name']
     for wr in raw_data['win_rate']:
         data[wr['hero_name']]['win_rate'] = wr['win_rate']
     for mu in raw_data['match_ups']:
@@ -52,9 +55,22 @@ def process_data(raw_data):
     with open('data.json', 'w') as f:
         json.dump(data, f)
 
+    lines = ['class Heroes(object):\n']
+    for nd in raw_data['name_dict']:
+        real_name = nd['hero_real_name']
+        name = real_name.replace(' ', '_').replace('\'', '').replace('-', '_')
+        lines.append('    {} = "{}"\n'.format(name, nd['hero_name']))
+    lines.append('\nclass CNHeroes(object):\n')
+    for nd in raw_data['cn_name_dict']:
+        real_name = nd['hero_real_name']
+        lines.append('    {} = "{}"\n'.format(real_name, nd['hero_name']))
+    with codecs.open('heroes.py', 'w', encoding='utf-8') as f:
+        f.writelines(lines)
+
 
 def main():
-    spiders = [NameDictSpider, WinRateSpider, MatchUpsSpider, TeammatesSpider]
+    spiders = [NameDictSpider, CNNameDictSpider,
+               WinRateSpider, MatchUpsSpider, TeammatesSpider]
     original_cwd = os.getcwd()
     project_path = get_path('spider/dotaplus')
     os.chdir(project_path)
