@@ -4,3 +4,6 @@
 - [x] heroes' chinese name and abbreviation
 - [ ] heroes' abbreviation
 - [x] auto generate hero name dict py script when getting data
+- [ ] web gui interface
+- [ ] recommend reason
+- [ ] generate output string and copy to clipboard
