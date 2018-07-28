@@ -2,7 +2,7 @@ from tabulate import tabulate
 import json
 import numpy as np
 import copy
-from heroes import Heroes, CNHeroes
+from heroes import Heroes, CNHeroes, to_key_name
 from cfg import Language
 
 
@@ -232,45 +232,51 @@ def main():
     lang = Language.CN
     bp = BanPick()
     bp.print_heroes(lang=lang)
-    bp.print_v_list(lang=lang)
-    bp.recommend([Heroes.Crystal_Maiden,
-                  Heroes.Lina,
-                  Heroes.Bloodseeker,
-                  Heroes.Batrider,
-                  Heroes.Nyx_Assassin],
-                 [Heroes.Troll_Warlord,
-                  Heroes.Natures_Prophet,
-                  Heroes.Lich,
-                  Heroes.Slardar], lang=Language.EN)
-    bp.recommend([CNHeroes.水晶室女,
-                  CNHeroes.莉娜,
-                  CNHeroes.嗜血狂魔,
-                  CNHeroes.蝙蝠骑士,
-                  CNHeroes.司夜刺客],
-                 [CNHeroes.巨魔战将,
-                  CNHeroes.先知,
-                  CNHeroes.巫妖,
-                  CNHeroes.斯拉达], lang=lang)
-    bp.win_rate([CNHeroes.水晶室女,
-                 CNHeroes.莉娜,
-                 CNHeroes.嗜血狂魔,
-                 CNHeroes.蝙蝠骑士,
-                 CNHeroes.司夜刺客],
-                [CNHeroes.巨魔战将,
-                 CNHeroes.先知,
-                 CNHeroes.巫妖,
-                 CNHeroes.斯拉达,
-                 CNHeroes.噬魂鬼], lang=lang)
-    bp.win_rate([CNHeroes.末日使者,
-                 CNHeroes.主宰,
-                 CNHeroes.沉默术士,
-                 CNHeroes.水晶室女,
-                 CNHeroes.炼金术士],
-                [CNHeroes.冥魂大帝,
-                 CNHeroes.莱恩,
-                 CNHeroes.钢背兽,
-                 CNHeroes.斯拉达,
-                 CNHeroes.宙斯], lang=lang)
+    # bp.print_v_list(lang=lang)
+    # bp.recommend([Heroes.Crystal_Maiden,
+    #               Heroes.Lina,
+    #               Heroes.Bloodseeker,
+    #               Heroes.Batrider,
+    #               Heroes.Nyx_Assassin],
+    #              [Heroes.Troll_Warlord,
+    #               Heroes.Natures_Prophet,
+    #               Heroes.Lich,
+    #               Heroes.Slardar], lang=Language.EN)
+    # bp.recommend([CNHeroes.水晶室女,
+    #               CNHeroes.莉娜,
+    #               CNHeroes.嗜血狂魔,
+    #               CNHeroes.蝙蝠骑士,
+    #               CNHeroes.司夜刺客],
+    #              [CNHeroes.巨魔战将,
+    #               CNHeroes.先知,
+    #               CNHeroes.巫妖,
+    #               CNHeroes.斯拉达], lang=lang)
+    # bp.win_rate([CNHeroes.水晶室女,
+    #              CNHeroes.莉娜,
+    #              CNHeroes.嗜血狂魔,
+    #              CNHeroes.蝙蝠骑士,
+    #              CNHeroes.司夜刺客],
+    #             [CNHeroes.巨魔战将,
+    #              CNHeroes.先知,
+    #              CNHeroes.巫妖,
+    #              CNHeroes.斯拉达,
+    #              CNHeroes.噬魂鬼], lang=lang)
+    # bp.win_rate([get_hero('AA'),
+    #               get_hero('海民'),
+    #               get_hero('黑鸟'),
+    #               get_hero('SK'),
+    #               get_hero('UG')],
+    #             [get_hero('术士'),
+    #               get_hero('宙斯'),
+    #               get_hero('SNK'),
+    #               get_hero('TB'),
+    #               get_hero('DK')], lang=lang)
+
+    match_ups = ['宙斯', "FW", "SA", '小Y', "蚂蚁"]
+    teammates = ['术士', "TF", 'NEC', "大屁股"]
+
+    bp.recommend(to_key_name(match_ups), to_key_name(teammates), lang=lang)
+    bp.win_rate(to_key_name(match_ups), to_key_name(teammates), lang=lang)
 
 
 if __name__ == '__main__':
