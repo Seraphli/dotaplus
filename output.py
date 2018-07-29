@@ -46,6 +46,17 @@ class CNOutput(object):
         print(msg)
         pyperclip.copy(';'.join(msgs))
 
+    def win_rate(self, match_ups, teammates):
+        theirs_score, ours_score, wr, table = self.bp.win_rate(
+            match_ups, teammates, lang=self.lang)
+        msg = '胜率:{0:.2f},易发挥:'.format(wr)
+        h_list = []
+        for i in range(3):
+            h_list.append(self.get_abbrev_name(table[i][0]))
+        msg += ','.join(h_list)
+        print(msg)
+        pyperclip.copy(';'.join(msg))
+
 
 def main():
     o = CNOutput()
@@ -56,6 +67,17 @@ def main():
         CNAbbrevHeroes.敌法
     ]
     o.recommend(match_ups, teammates)
+    team_1 = [CNAbbrevHeroes.巫医,
+              CNAbbrevHeroes.克林克兹,
+              CNAbbrevHeroes.不朽尸王,
+              CNAbbrevHeroes.嗜血狂魔,
+              CNAbbrevHeroes.瘟疫法师]
+    team_2 = [CNAbbrevHeroes.宙斯,
+              CNAbbrevHeroes.全能骑士,
+              CNAbbrevHeroes.树精卫士,
+              CNAbbrevHeroes.邪影芳灵,
+              CNAbbrevHeroes.虚空假面]
+    o.win_rate(team_1, team_2)
 
 
 if __name__ == '__main__':
