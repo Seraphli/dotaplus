@@ -292,31 +292,27 @@ class BanPick(object):
 
 
 def main():
+    match_ups = [
+        CNAbbrevHeroes.拍拍,
+        CNAbbrevHeroes.龙骑,
+        CNAbbrevHeroes.蓝胖,
+        CNAbbrevHeroes.拉比克,
+        CNAbbrevHeroes.小骷髅
+    ]
+    teammates = [
+        CNAbbrevHeroes.莱恩,
+        CNAbbrevHeroes.哈斯卡,
+        CNAbbrevHeroes.军团,
+        CNAbbrevHeroes.天怒,
+        CNAbbrevHeroes.孽主
+    ]
     lang = Language.CN
     bp = BanPick()
-    _, _, _, t_1, t_2 = bp.recommend([CNAbbrevHeroes.水晶室女,
-                                      CNAbbrevHeroes.莉娜,
-                                      CNAbbrevHeroes.嗜血狂魔,
-                                      CNAbbrevHeroes.蝙蝠骑士,
-                                      CNAbbrevHeroes.司夜刺客],
-                                     [CNAbbrevHeroes.巨魔战将,
-                                      CNAbbrevHeroes.先知,
-                                      CNAbbrevHeroes.巫妖,
-                                      CNAbbrevHeroes.斯拉达])
+    _, _, _, t_1, t_2 = bp.recommend(match_ups, teammates)
     t_1 = bp.convert_table_lang(t_1, lang)
     t_2 = bp.convert_table_lang(t_2, lang)
     bp.print_recommend(t_1, t_2)
-    team_1 = [CNAbbrevHeroes.巫医,
-              CNAbbrevHeroes.克林克兹,
-              CNAbbrevHeroes.不朽尸王,
-              CNAbbrevHeroes.嗜血狂魔,
-              CNAbbrevHeroes.瘟疫法师]
-    team_2 = [CNAbbrevHeroes.宙斯,
-              CNAbbrevHeroes.全能骑士,
-              CNAbbrevHeroes.树精卫士,
-              CNAbbrevHeroes.邪影芳灵,
-              CNAbbrevHeroes.虚空假面]
-    _, _, _, table = bp.win_rate(team_1, team_2, lang=lang)
+    _, _, _, table = bp.win_rate(match_ups, teammates, lang=lang)
     table = bp.convert_table_lang(table, lang)
     bp.print_table(table, headers=['Name', 'Value', 'Reason'])
 
