@@ -59,7 +59,7 @@ class CNOutput(object):
             h_list.append(self.get_abbrev_name(table[i][0]))
         msg += ','.join(h_list)
         print(msg)
-        pyperclip.copy(';'.join(msg))
+        pyperclip.copy(msg)
 
 
 def main():
