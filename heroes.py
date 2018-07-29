@@ -1,6 +1,3 @@
-from custom_data import CN_abbrev_dict
-
-
 class Heroes(object):
     Anti_Mage = "antimage"
     Axe = "axe"

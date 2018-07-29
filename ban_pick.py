@@ -260,7 +260,7 @@ class BanPick(object):
         _h_v, reasons = self.cal_match(_h_v, reasons, match_ups, teammates)
         v_list = self.get_v_list(_h_v, exclude=exclude)
         table_1, table_2 = self.get_recommend(v_list, reasons)
-        return _h_v, reasons, table_1, table_2
+        return _h_v, reasons, v_list, table_1, table_2
 
     def win_rate(self, match_ups, teammates, lang=Language.EN):
         if lang == Language.CN:
@@ -293,15 +293,15 @@ class BanPick(object):
 def main():
     lang = Language.CN
     bp = BanPick()
-    _, _, t_1, t_2 = bp.recommend([CNHeroes.水晶室女,
-                                   CNHeroes.莉娜,
-                                   CNHeroes.嗜血狂魔,
-                                   CNHeroes.蝙蝠骑士,
-                                   CNHeroes.司夜刺客],
-                                  [CNHeroes.巨魔战将,
-                                   CNHeroes.先知,
-                                   CNHeroes.巫妖,
-                                   CNHeroes.斯拉达])
+    _, _, _, t_1, t_2 = bp.recommend([CNHeroes.水晶室女,
+                                      CNHeroes.莉娜,
+                                      CNHeroes.嗜血狂魔,
+                                      CNHeroes.蝙蝠骑士,
+                                      CNHeroes.司夜刺客],
+                                     [CNHeroes.巨魔战将,
+                                      CNHeroes.先知,
+                                      CNHeroes.巫妖,
+                                      CNHeroes.斯拉达])
     t_1 = bp.convert_table_lang(t_1, lang)
     t_2 = bp.convert_table_lang(t_2, lang)
     bp.print_recommend(t_1, t_2)
