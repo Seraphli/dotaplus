@@ -1,6 +1,6 @@
 from ban_pick import BanPick
 from cfg import Language
-from heroes import Heroes, CNHeroes
+from cn_heroes import CNAbbrevHeroes
 import pyperclip
 from custom_data import CN_ABBREV_DICT
 
@@ -49,7 +49,13 @@ class CNOutput(object):
 
 def main():
     o = CNOutput()
-    o.recommend([], [])
+    match_ups = [
+        CNAbbrevHeroes.冰女
+    ]
+    teammates = [
+        CNAbbrevHeroes.敌法
+    ]
+    o.recommend(match_ups, teammates)
 
 
 if __name__ == '__main__':

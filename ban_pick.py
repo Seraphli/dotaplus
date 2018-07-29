@@ -3,6 +3,7 @@ import json
 import numpy as np
 import copy
 from heroes import Heroes, CNHeroes
+from cn_heroes import CNAbbrevHeroes
 from cfg import Language
 from reason import Reasons, get_good_reason, get_bad_reason
 
@@ -293,41 +294,28 @@ class BanPick(object):
 def main():
     lang = Language.CN
     bp = BanPick()
-    _, _, _, t_1, t_2 = bp.recommend([CNHeroes.水晶室女,
-                                      CNHeroes.莉娜,
-                                      CNHeroes.嗜血狂魔,
-                                      CNHeroes.蝙蝠骑士,
-                                      CNHeroes.司夜刺客],
-                                     [CNHeroes.巨魔战将,
-                                      CNHeroes.先知,
-                                      CNHeroes.巫妖,
-                                      CNHeroes.斯拉达])
+    _, _, _, t_1, t_2 = bp.recommend([CNAbbrevHeroes.水晶室女,
+                                      CNAbbrevHeroes.莉娜,
+                                      CNAbbrevHeroes.嗜血狂魔,
+                                      CNAbbrevHeroes.蝙蝠骑士,
+                                      CNAbbrevHeroes.司夜刺客],
+                                     [CNAbbrevHeroes.巨魔战将,
+                                      CNAbbrevHeroes.先知,
+                                      CNAbbrevHeroes.巫妖,
+                                      CNAbbrevHeroes.斯拉达])
     t_1 = bp.convert_table_lang(t_1, lang)
     t_2 = bp.convert_table_lang(t_2, lang)
     bp.print_recommend(t_1, t_2)
-    team_1 = [CNHeroes.巫医,
-              CNHeroes.克林克兹,
-              CNHeroes.不朽尸王,
-              CNHeroes.嗜血狂魔,
-              CNHeroes.瘟疫法师]
-    team_2 = [CNHeroes.宙斯,
-              CNHeroes.全能骑士,
-              CNHeroes.树精卫士,
-              CNHeroes.邪影芳灵,
-              CNHeroes.虚空假面]
-    _, _, _, table = bp.win_rate(team_1, team_2, lang=lang)
-    table = bp.convert_table_lang(table, lang)
-    bp.print_table(table, headers=['Name', 'Value', 'Reason'])
-    team_1 = [CNHeroes.暗夜魔王,
-              CNHeroes.拉比克,
-              CNHeroes.帕吉,
-              CNHeroes.昆卡,
-              CNHeroes.编织者]
-    team_2 = [CNHeroes.灰烬之灵,
-              CNHeroes.术士,
-              CNHeroes.撼地者,
-              CNHeroes.虚空假面,
-              CNHeroes.水晶室女]
+    team_1 = [CNAbbrevHeroes.巫医,
+              CNAbbrevHeroes.克林克兹,
+              CNAbbrevHeroes.不朽尸王,
+              CNAbbrevHeroes.嗜血狂魔,
+              CNAbbrevHeroes.瘟疫法师]
+    team_2 = [CNAbbrevHeroes.宙斯,
+              CNAbbrevHeroes.全能骑士,
+              CNAbbrevHeroes.树精卫士,
+              CNAbbrevHeroes.邪影芳灵,
+              CNAbbrevHeroes.虚空假面]
     _, _, _, table = bp.win_rate(team_1, team_2, lang=lang)
     table = bp.convert_table_lang(table, lang)
     bp.print_table(table, headers=['Name', 'Value', 'Reason'])
