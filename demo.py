@@ -5,20 +5,12 @@ from ban_pick import BanPick
 
 
 def main():
-    match_ups = [
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none
-    ]
-    teammates = [
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none
-    ]
+    match_ups = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
+    teammates = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
     lang = Language.CN
     o = CNOutput()
     bp = BanPick()

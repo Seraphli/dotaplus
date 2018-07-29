@@ -63,21 +63,13 @@ class CNOutput(object):
 
 
 def main():
+    match_ups = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
+    teammates = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
     o = CNOutput()
-    match_ups = [
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none
-    ]
-    teammates = [
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none
-    ]
     match_ups, teammates = o.bp.remove_none(match_ups, teammates)
     o.recommend(match_ups, teammates)
     team_1 = match_ups

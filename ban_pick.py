@@ -310,20 +310,12 @@ class BanPick(object):
 
 
 def main():
-    match_ups = [
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none
-    ]
-    teammates = [
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none,
-        CNAbbrevHeroes.none
-    ]
+    match_ups = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
+    teammates = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
     lang = Language.CN
     bp = BanPick()
     match_ups, teammates = bp.remove_none(match_ups, teammates)
