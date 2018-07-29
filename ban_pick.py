@@ -311,18 +311,18 @@ class BanPick(object):
 
 def main():
     match_ups = [
-        CNAbbrevHeroes.拍拍,
-        CNAbbrevHeroes.龙骑,
-        CNAbbrevHeroes.蓝胖,
-        CNAbbrevHeroes.拉比克,
-        CNAbbrevHeroes.小骷髅
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none
     ]
     teammates = [
-        CNAbbrevHeroes.莱恩,
-        CNAbbrevHeroes.哈斯卡,
-        CNAbbrevHeroes.军团,
-        CNAbbrevHeroes.天怒,
-        CNAbbrevHeroes.孽主
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none
     ]
     lang = Language.CN
     bp = BanPick()
