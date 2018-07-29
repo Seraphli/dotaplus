@@ -1,10 +1,12 @@
+import codecs
+
 CN_ABBREV_DICT = {
     "antimage": ["DF", "AM", "敌法", "敌法师"],
     "axe": ["FW", "AXE", "斧王"],
     "bane": ["痛苦之源", "祸乱之源"],
     "bloodseeker": ["BS", "血魔", "嗜血狂魔"],
     "crystal_maiden": ["CM", "冰女", "水晶室女"],
-    "drow_ranger": ["DR", "小黑", "黑弓", " 卓尔游侠"],
+    "drow_ranger": ["DR", "小黑", "黑弓", "卓尔游侠"],
     "earthshaker": ["ES", "神牛", "小牛", "撼地神牛", "撼地者"],
     "juggernaut": ["JUGG", "剑圣", "主宰"],
     "mirana": ["POM", "POTM", "白虎", "月之女祭司", "米拉娜"],
@@ -128,3 +130,24 @@ def get_hero(name):
 def to_key_name(heroes):
     heroes = [get_hero(name) for name in heroes]
     return heroes
+
+
+def generate_abbrev_name_py():
+    lines = ['class CNAbbrevHeroes(object):\n']
+    for h in CN_ABBREV_DICT:
+        for abbrev in CN_ABBREV_DICT[h]:
+            if ord(abbrev[0]) < 255:
+                lines.append('    {} = "{}"\n'.format(abbrev.upper(), h))
+                lines.append('    {} = "{}"\n'.format(abbrev.lower(), h))
+            else:
+                lines.append('    {} = "{}"\n'.format(abbrev, h))
+    with codecs.open('cn_heroes.py', 'w', encoding='utf-8') as f:
+        f.writelines(lines)
+
+
+def main():
+    generate_abbrev_name_py()
+
+
+if __name__ == '__main__':
+    main()
