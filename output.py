@@ -26,6 +26,8 @@ class CNOutput(object):
         return abbrev
 
     def recommend(self, match_ups, teammates):
+        if len(match_ups) == 5 and len(teammates) == 5:
+            return
         _h_v, reasons, v_list, _, _ = self.bp.recommend(match_ups, teammates)
         msgs = []
         msg = '推荐:'
@@ -47,6 +49,8 @@ class CNOutput(object):
         pyperclip.copy(';'.join(msgs))
 
     def win_rate(self, match_ups, teammates):
+        if len(match_ups) != 5 or len(teammates) != 5:
+            return
         theirs_score, ours_score, wr, table = self.bp.win_rate(
             match_ups, teammates, lang=self.lang)
         msg = '胜率:{0:.2f},易发挥:'.format(wr)
@@ -61,19 +65,20 @@ class CNOutput(object):
 def main():
     o = CNOutput()
     match_ups = [
-        CNAbbrevHeroes.拍拍,
-        CNAbbrevHeroes.龙骑,
-        CNAbbrevHeroes.蓝胖,
-        CNAbbrevHeroes.拉比克,
-        CNAbbrevHeroes.小骷髅
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none
     ]
     teammates = [
-        CNAbbrevHeroes.莱恩,
-        CNAbbrevHeroes.哈斯卡,
-        CNAbbrevHeroes.军团,
-        CNAbbrevHeroes.天怒,
-        CNAbbrevHeroes.孽主
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none,
+        CNAbbrevHeroes.none
     ]
+    match_ups, teammates = o.bp.remove_none(match_ups, teammates)
     o.recommend(match_ups, teammates)
     team_1 = match_ups
     team_2 = teammates

@@ -250,6 +250,8 @@ class BanPick(object):
         return _h_v, reasons
 
     def recommend(self, match_ups, teammates):
+        if len(match_ups) == 5 and len(teammates) == 5:
+            return
         exclude = []
         exclude.extend(match_ups)
         exclude.extend(teammates)
@@ -265,6 +267,8 @@ class BanPick(object):
         return _h_v, reasons, v_list, table_1, table_2
 
     def win_rate(self, match_ups, teammates, lang=Language.EN):
+        if len(match_ups) != 5 or len(teammates) != 5:
+            return
         if lang == Language.CN:
             wr_text = '胜率'
         else:
@@ -291,6 +295,19 @@ class BanPick(object):
         table.append([wr_text, wr, ''])
         return theirs_score, ours_score, wr, table
 
+    def remove_none(self, match_ups, teammates):
+        _match_ups = []
+        for mu in match_ups:
+            if mu == CNAbbrevHeroes.none:
+                continue
+            _match_ups.append(mu)
+        _teammates = []
+        for tm in teammates:
+            if tm == CNAbbrevHeroes.none:
+                continue
+            _teammates.append(tm)
+        return _match_ups, _teammates
+
 
 def main():
     match_ups = [
@@ -309,13 +326,18 @@ def main():
     ]
     lang = Language.CN
     bp = BanPick()
-    _, _, _, t_1, t_2 = bp.recommend(match_ups, teammates)
-    t_1 = bp.convert_table_lang(t_1, lang)
-    t_2 = bp.convert_table_lang(t_2, lang)
-    bp.print_recommend(t_1, t_2)
-    _, _, _, table = bp.win_rate(match_ups, teammates, lang=lang)
-    table = bp.convert_table_lang(table, lang)
-    bp.print_table(table, headers=['Name', 'Value', 'Reason'])
+    match_ups, teammates = bp.remove_none(match_ups, teammates)
+    r = bp.recommend(match_ups, teammates)
+    if r is not None:
+        _, _, _, t_1, t_2 = r
+        t_1 = bp.convert_table_lang(t_1, lang)
+        t_2 = bp.convert_table_lang(t_2, lang)
+        bp.print_recommend(t_1, t_2)
+    r = bp.win_rate(match_ups, teammates, lang=lang)
+    if r is not None:
+        _, _, _, table = r
+        table = bp.convert_table_lang(table, lang)
+        bp.print_table(table, headers=['Name', 'Value', 'Reason'])
 
 
 if __name__ == '__main__':

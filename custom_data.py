@@ -133,8 +133,9 @@ def to_key_name(heroes):
 
 
 def generate_abbrev_name_py():
-    lines = ['class CNAbbrevHeroes(object):\n']
+    lines = ['class CNAbbrevHeroes(object):\n    none = "none"\n']
     for h in CN_ABBREV_DICT:
+        lines.append('    {} = "{}"\n'.format(h, h))
         for abbrev in CN_ABBREV_DICT[h]:
             if ord(abbrev[0]) < 255:
                 lines.append('    {} = "{}"\n'.format(abbrev.upper(), h))
