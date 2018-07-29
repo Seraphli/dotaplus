@@ -73,6 +73,7 @@ class BanPick(object):
         _table = []
         for i in table:
             if i[0] not in self.data:
+                _table.append(i)
                 continue
             reason = i[2]
             for h in self.data:
