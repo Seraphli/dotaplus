@@ -1,4 +1,4 @@
-CN_abbrev_dict = {
+CN_ABBREV_DICT = {
     "antimage": ["DF", "AM", "敌法", "敌法师"],
     "axe": ["FW", "AXE", "斧王"],
     "bane": ["痛苦之源", "祸乱之源"],
@@ -118,7 +118,7 @@ CN_abbrev_dict = {
 
 
 def get_hero(name):
-    for k, v in CN_abbrev_dict.items():
+    for k, v in CN_ABBREV_DICT.items():
         if name.upper() == k.upper() or name.upper() in v:
             return k
 
