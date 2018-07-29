@@ -4,7 +4,7 @@ import numpy as np
 import copy
 from heroes import Heroes, CNHeroes
 from cfg import Language
-from reason import Reasons, CN_REASON_DICT
+from reason import Reasons, get_good_reason, get_bad_reason
 
 
 class BanPick(object):
@@ -55,50 +55,30 @@ class BanPick(object):
         table_1 = []
         for i in range(n):
             h = v_list[i][0]
-            _reason = []
-            for r in CN_REASON_DICT:
-                if '-' not in r and h in reasons[r]:
-                    if r == Reasons.MATCH_UPS or r == Reasons.TEAMMATES:
-                        _reason.append(CN_REASON_DICT[r] + ':' +
-                                       ','.join(reasons[r][h]))
-                    else:
-                        _reason.append(CN_REASON_DICT[r])
-            table_1.append([v_list[i][0], v_list[i][1], ';'.join(_reason)])
+            table_1.append([v_list[i][0], v_list[i][1],
+                            get_good_reason(h, reasons)])
         table_2 = []
         for i in range(n):
             h = v_list[-i - 1][0]
-            _reason = []
-            for r in CN_REASON_DICT:
-                if '-' in r and h in reasons[r]:
-                    if r == Reasons.N_MATCH_UPS or r == Reasons.N_TEAMMATES:
-                        _reason.append(CN_REASON_DICT[r] + ':' +
-                                       ','.join(reasons[r][h]))
-                    else:
-                        _reason.append(CN_REASON_DICT[r])
             table_2.append([v_list[-i - 1][0], v_list[-i - 1][1],
-                            ','.join(_reason)])
+                            get_bad_reason(h, reasons)])
         return table_1, table_2
 
-    def convert_table_lang(self, table_1, table_2, lang=Language.EN):
+    def convert_table_lang(self, table, lang=Language.EN):
         if lang == Language.CN:
             name_key = 'cn_name'
         else:
             name_key = 'name'
-        _table_1 = []
-        for i in table_1:
+        _table = []
+        for i in table:
+            if i[0] not in self.data:
+                continue
             reason = i[2]
             for h in self.data:
                 if h in reason:
                     reason = reason.replace(h, self.data[h][name_key])
-            _table_1.append([self.data[i[0]][name_key], i[1], reason])
-        _table_2 = []
-        for i in table_2:
-            reason = i[2]
-            for h in self.data:
-                if h in reason:
-                    reason = reason.replace(h, self.data[h][name_key])
-            _table_2.append([self.data[i[0]][name_key], i[1], reason])
-        return _table_1, _table_2
+            _table.append([self.data[i[0]][name_key], i[1], reason])
+        return _table
 
     def print_recommend(self, table_1, table_2):
         print('Recommend')
@@ -284,10 +264,8 @@ class BanPick(object):
 
     def win_rate(self, match_ups, teammates, lang=Language.EN):
         if lang == Language.CN:
-            name_key = 'cn_name'
             wr_text = '胜率'
         else:
-            name_key = 'name'
             wr_text = 'Win rate'
         reasons = {}
         _h_v, reasons = self.pre_calculated(self.h_v, reasons)
@@ -297,16 +275,18 @@ class BanPick(object):
         ours_score = []
         for tm in teammates:
             ours_score.append(_h_v_1[tm])
-            table.append([self.data[tm][name_key], _h_v_1[tm]])
+            table.append([tm, _h_v_1[tm],
+                          get_good_reason(tm, reasons_1)])
         theirs_score = []
         for mu in match_ups:
             theirs_score.append(_h_v_2[mu])
-            table.append([self.data[mu][name_key], _h_v_2[mu]])
+            table.append([mu, _h_v_2[mu],
+                          get_good_reason(mu, reasons_2)])
         _theirs_score = sum(theirs_score) / len(theirs_score)
         table = sorted(table, key=lambda x: x[1], reverse=True)
         _ours_score = sum(ours_score) / len(ours_score)
         wr = _ours_score / (_ours_score + _theirs_score) * 100
-        table.append([wr_text, wr])
+        table.append([wr_text, wr, ''])
         return theirs_score, ours_score, wr, table
 
 
@@ -322,7 +302,8 @@ def main():
                                    CNHeroes.先知,
                                    CNHeroes.巫妖,
                                    CNHeroes.斯拉达])
-    t_1, t_2 = bp.convert_table_lang(t_1, t_2, lang)
+    t_1 = bp.convert_table_lang(t_1, lang)
+    t_2 = bp.convert_table_lang(t_2, lang)
     bp.print_recommend(t_1, t_2)
     team_1 = [CNHeroes.巫医,
               CNHeroes.克林克兹,
@@ -335,6 +316,7 @@ def main():
               CNHeroes.邪影芳灵,
               CNHeroes.虚空假面]
     _, _, _, table = bp.win_rate(team_1, team_2, lang=lang)
+    table = bp.convert_table_lang(table, lang)
     bp.print_table(table, headers=['Name', 'Value', 'Reason'])
     team_1 = [CNHeroes.暗夜魔王,
               CNHeroes.拉比克,
@@ -347,6 +329,7 @@ def main():
               CNHeroes.虚空假面,
               CNHeroes.水晶室女]
     _, _, _, table = bp.win_rate(team_1, team_2, lang=lang)
+    table = bp.convert_table_lang(table, lang)
     bp.print_table(table, headers=['Name', 'Value', 'Reason'])
 
 
