@@ -265,6 +265,7 @@ class CNAbbrevHeroes(object):
     DS = "dark_seer"
     ds = "dark_seer"
     黑贤 = "dark_seer"
+    兔子 = "dark_seer"
     黑暗贤者 = "dark_seer"
     clinkz = "clinkz"
     小骷髅 = "clinkz"
