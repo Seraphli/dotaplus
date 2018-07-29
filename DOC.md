@@ -9,3 +9,5 @@
 5. coop_index_pos, 英雄自己是比较好的队友
 6. coop_index_neg, 英雄自己不是很差的队友
 7. coop_index, 在别的英雄页面里英雄自己的队友系数较大
+8. match_ups, 克制别的英雄
+9. teammates, 做队友比较好

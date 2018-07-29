@@ -118,6 +118,7 @@ class Heroes(object):
     Dark_Willow = "dark_willow"
     Pangolier = "pangolier"
 
+
 class CNHeroes(object):
     敌法师 = "antimage"
     斧王 = "axe"
@@ -234,15 +235,3 @@ class CNHeroes(object):
     齐天大圣 = "monkey_king"
     邪影芳灵 = "dark_willow"
     石鳞剑士 = "pangolier"
-
-
-def get_hero(name):
-    for k, v in CN_abbrev_dict.items():
-        if name.upper() == k.upper() or name.upper() in v:
-            return k
-
-    raise ValueError('Cannot find hero: {}'.format(name))
-
-def to_key_name(heroes):
-    heroes = [get_hero(name) for name in heroes]
-    return heroes

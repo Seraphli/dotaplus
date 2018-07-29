@@ -13,7 +13,7 @@ CN_abbrev_dict = {
     "phantom_lancer": ["PL", "猴子", "幻影长矛手"],
     "puck": ["仙女龙", "帕克"],
     "pudge": ["TF", "胖子", "屠夫"],
-    "razor": ["电魂", "闪电幽魂","剃刀"],
+    "razor": ["电魂", "闪电幽魂", "剃刀"],
     "sand_king": ["SK", "沙王"],
     "storm_spirit": ["蓝猫", "风暴之灵"],
     "sven": ["SV", "SW", "流浪剑客", "斯温"],
@@ -38,7 +38,7 @@ CN_abbrev_dict = {
     "beastmaster": ["BM", "兽王"],
     "queenofpain": ["QOP", "女王", "痛苦女王"],
     "venomancer": ["剧毒", "剧毒术士"],
-    "faceless_void": ["FV","虚空", "虚空假面"],
+    "faceless_void": ["FV", "虚空", "虚空假面"],
     "skeleton_king": ["SNK", "骷髅王", "冥魂大帝"],
     "death_prophet": ["DP", "死亡先知"],
     "phantom_assassin": ["PA", "幻刺", "幻影刺客"],
@@ -115,3 +115,16 @@ CN_abbrev_dict = {
     "dark_willow": ["小仙女", "花仙子", "邪影芳灵"],
     "pangolier": ["穿山甲", "滚滚", "石鳞剑士"]
 }
+
+
+def get_hero(name):
+    for k, v in CN_abbrev_dict.items():
+        if name.upper() == k.upper() or name.upper() in v:
+            return k
+
+    raise ValueError('Cannot find hero: {}'.format(name))
+
+
+def to_key_name(heroes):
+    heroes = [get_hero(name) for name in heroes]
+    return heroes
