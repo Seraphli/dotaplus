@@ -269,6 +269,7 @@ class CNAbbrevHeroes(object):
     黑暗贤者 = "dark_seer"
     clinkz = "clinkz"
     小骷髅 = "clinkz"
+    骨弓 = "clinkz"
     骷髅射手 = "clinkz"
     克林克兹 = "clinkz"
     omniknight = "omniknight"

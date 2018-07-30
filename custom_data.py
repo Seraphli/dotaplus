@@ -55,7 +55,7 @@ CN_ABBREV_DICT = {
     'furion': ['FUR', 'NP', '先知'],
     'life_stealer': ['LS', '小狗', '食尸鬼', '噬魂鬼'],
     'dark_seer': ['DS', '黑贤', '兔子', '黑暗贤者'],
-    'clinkz': ['小骷髅', '骷髅射手', '克林克兹'],
+    'clinkz': ['小骷髅', '骨弓', '骷髅射手', '克林克兹'],
     'omniknight': ['OK', '全能', '全能骑士'],
     'enchantress': ['ENT', '小鹿', '魅惑魔女'],
     'huskar': ['HUS', '神灵', '神灵武士', '哈斯卡'],
