@@ -1,5 +1,6 @@
 class CNAbbrevHeroes(object):
     none = "none"
+    无 = "none"
     antimage = "antimage"
     DF = "antimage"
     df = "antimage"

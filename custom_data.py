@@ -1,4 +1,8 @@
 import codecs
+from cfg import Interface
+from urllib.request import urlretrieve
+import json
+from util import get_path
 
 CN_ABBREV_DICT = {
     'antimage': ['DF', 'AM', '敌法', '敌法师'],
@@ -118,6 +122,38 @@ CN_ABBREV_DICT = {
     'pangolier': ['穿山甲', '滚滚', '石鳞剑士']
 }
 
+CN_LAYOUT = ['elder_titan', 'undying', 'abaddon', 'shredder', 'omniknight',
+             'beastmaster', 'legion_commander',
+             'skeleton_king', 'phoenix', 'centaur', 'rattletrap', 'huskar',
+             'life_stealer', 'earth_spirit',
+             'abyssal_underlord', 'tiny', 'tusk', 'pudge', 'earthshaker', 'axe',
+             'slardar', 'sven', 'kunkka',
+             'night_stalker', 'doom_bringer', 'treant', 'sand_king',
+             'chaos_knight', 'tidehunter', 'alchemist',
+             'lycan', 'wisp', 'spirit_breaker', 'brewmaster', 'bristleback',
+             'magnataur', 'dragon_knight',
+             'juggernaut', 'clinkz', 'viper', 'razor', 'venomancer', 'riki',
+             'drow_ranger', 'morphling',
+             'nyx_assassin', 'bloodseeker', 'templar_assassin',
+             'vengefulspirit', 'arc_warden', 'naga_siren',
+             'troll_warlord', 'phantom_assassin', 'phantom_lancer', 'spectre',
+             'nevermore', 'lone_druid', 'terrorblade',
+             'antimage', 'slark', 'ember_spirit', 'ursa', 'sniper',
+             'gyrocopter', 'pangolier', 'mirana', 'meepo',
+             'weaver', 'medusa', 'broodmother', 'faceless_void',
+             'bounty_hunter', 'luna', 'monkey_king', 'tinker',
+             'furion', 'keeper_of_the_light', 'skywrath_mage', 'zuus',
+             'winter_wyvern', 'techies', 'witch_doctor',
+             'lich', 'puck', 'pugna', 'disruptor', 'dazzle', 'leshrac',
+             'rubick', 'shadow_demon', 'shadow_shaman',
+             'warlock', 'jakiro', 'death_prophet', 'obsidian_destroyer',
+             'crystal_maiden', 'silencer', 'queenofpain',
+             'necrolyte', 'invoker', 'oracle', 'bane', 'visage', 'lina', 'lion',
+             'batrider', 'enigma',
+             'ancient_apparition', 'dark_willow', 'chen', 'storm_spirit',
+             'windrunner', 'ogre_magi', 'enchantress',
+             'dark_seer']
+
 
 def get_hero(name):
     for k, v in CN_ABBREV_DICT.items():
@@ -133,7 +169,9 @@ def to_key_name(heroes):
 
 
 def generate_abbrev_name_py():
-    lines = ['class CNAbbrevHeroes(object):\n    none = "none"\n']
+    lines = ['class CNAbbrevHeroes(object):\n'
+             '    none = "none"\n'
+             '    无 = "none"\n']
     for h in CN_ABBREV_DICT:
         lines.append('    {} = "{}"\n'.format(h, h))
         for abbrev in CN_ABBREV_DICT[h]:
@@ -146,8 +184,38 @@ def generate_abbrev_name_py():
         f.writelines(lines)
 
 
+def generate_hero_index_py():
+    head = 'HERO_INDEX = {\n'
+    tail = '\n}\n'
+    _lines = []
+    hero_num = Interface.HERO_NUM
+    counter = 0
+    for c, rows in enumerate(hero_num):
+        for row, col_n in enumerate(rows):
+            for col in range(col_n):
+                _lines.append('    "{}": "{}"'.format((c, row, col),
+                                                      CN_LAYOUT[counter]))
+                counter += 1
+    content = head + ',\n'.join(_lines) + tail
+    with codecs.open('hero_index.py', 'w', encoding='utf-8') as f:
+        f.write(content)
+
+
+def get_heroes_image():
+    image_url = 'http://media.steampowered.com/apps/' \
+                'dota2/images/heroes/{}_lg.png'
+    with open('data.json') as f:
+        data = json.load(f)
+    for h in data:
+        url = image_url.format(h)
+        urlretrieve(url, get_path('res/heroes') +
+                    '/{}.png'.format(h))
+
+
 def main():
     generate_abbrev_name_py()
+    generate_hero_index_py()
+    get_heroes_image()
 
 
 if __name__ == '__main__':

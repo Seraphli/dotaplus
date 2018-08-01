@@ -43,12 +43,16 @@ class BanPick(object):
             h_v[_h] += f * self.factor[idx]
         return h_v
 
-    def get_v_list(self, h_v, exclude=None):
+    def get_v_list(self, h_v, available=None, exclude=None):
         v_list = []
         for _h, _v in h_v.items():
             if exclude and _h in exclude:
                 continue
-            v_list.append([_h, _v])
+            if available:
+                if _h in available:
+                    v_list.append([_h, _v])
+            else:
+                v_list.append([_h, _v])
         v_list = sorted(v_list, key=lambda x: x[1], reverse=True)
         return v_list
 
@@ -249,7 +253,7 @@ class BanPick(object):
                     reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]].append(tm)
         return _h_v, reasons
 
-    def recommend(self, match_ups, teammates):
+    def recommend(self, match_ups, teammates, available=None):
         if len(match_ups) == 5 and len(teammates) == 5:
             return
         exclude = []
@@ -262,7 +266,7 @@ class BanPick(object):
         reasons = {}
         _h_v, reasons = self.pre_calculated(self.h_v, reasons, factor)
         _h_v, reasons = self.cal_match(_h_v, reasons, match_ups, teammates)
-        v_list = self.get_v_list(_h_v, exclude=exclude)
+        v_list = self.get_v_list(_h_v, available=available, exclude=exclude)
         table_1, table_2 = self.get_recommend(v_list, reasons)
         return _h_v, reasons, v_list, table_1, table_2
 

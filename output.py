@@ -25,10 +25,11 @@ class CNOutput(object):
 
         return abbrev
 
-    def recommend(self, match_ups, teammates):
+    def recommend(self, match_ups, teammates, available=None):
         if len(match_ups) == 5 and len(teammates) == 5:
             return
-        _h_v, reasons, v_list, _, _ = self.bp.recommend(match_ups, teammates)
+        _h_v, reasons, v_list, _, _ = self.bp.recommend(
+            match_ups, teammates, available)
         msgs = []
         msg = '推荐:'
         h_list = []
@@ -44,7 +45,6 @@ class CNOutput(object):
             h = v_list[-i - 1][0]
             h_list.append(self.get_abbrev_name(h))
         msg += ','.join(h_list)
-        msgs.append(msg)
         print(msg)
         pyperclip.copy(';'.join(msgs))
 
