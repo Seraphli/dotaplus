@@ -3,11 +3,9 @@ import json
 import numpy as np
 import copy
 from heroes import Heroes, CNHeroes
-
-
-class Language(object):
-    EN = 'en'
-    CN = 'cn'
+from cn_heroes import CNAbbrevHeroes
+from cfg import Language
+from reason import Reasons, get_good_reason, get_bad_reason
 
 
 class BanPick(object):
@@ -21,6 +19,7 @@ class BanPick(object):
         self.h_v = {}
         for h in self.data:
             self.h_v[h] = 0
+        self.reason_n = 10
 
     def print_heroes(self, lang=Language.EN):
         if lang == Language.CN:
@@ -44,41 +43,68 @@ class BanPick(object):
             h_v[_h] += f * self.factor[idx]
         return h_v
 
-    def print_v_list(self, n=15, exclude=None, h_v=None, lang=Language.EN):
-        if lang == Language.CN:
-            name_key = 'cn_name'
-        else:
-            name_key = 'name'
-        if h_v is None:
-            h_v = self.h_v
-        if exclude:
-            _num = self.num_heroes - len(exclude)
-        else:
-            _num = self.num_heroes
+    def get_v_list(self, h_v, available=None, exclude=None):
         v_list = []
         for _h, _v in h_v.items():
             if exclude and _h in exclude:
                 continue
-            v_list.append([_h, _v])
+            if available:
+                if _h in available:
+                    v_list.append([_h, _v])
+            else:
+                v_list.append([_h, _v])
         v_list = sorted(v_list, key=lambda x: x[1], reverse=True)
-        print('Recommended')
-        table = []
-        for i in range(n):
-            table.append([self.data[v_list[i][0]][name_key], v_list[i][1]])
-        self.print_table(table, ['Name', 'Value'])
-        print('Not Recommended')
-        table = []
-        for i in range(n):
-            table.append([self.data[v_list[_num - i - 1][0]][name_key],
-                          v_list[_num - i - 1][1]])
-        self.print_table(table, ['Name', 'Value'])
+        return v_list
 
-    def pre_calculated(self, lang=Language.EN):
+    def get_recommend(self, v_list, reasons, n=15):
+        table_1 = []
+        for i in range(n):
+            h = v_list[i][0]
+            table_1.append([v_list[i][0], v_list[i][1],
+                            get_good_reason(h, reasons)])
+        table_2 = []
+        for i in range(n):
+            h = v_list[-i - 1][0]
+            table_2.append([v_list[-i - 1][0], v_list[-i - 1][1],
+                            get_bad_reason(h, reasons)])
+        return table_1, table_2
+
+    def convert_table_lang(self, table, lang=Language.EN):
+        if lang == Language.CN:
+            name_key = 'cn_name'
+        else:
+            name_key = 'name'
+        _table = []
+        for i in table:
+            if i[0] not in self.data:
+                _table.append(i)
+                continue
+            reason = i[2]
+            for h in self.data:
+                if h in reason:
+                    reason = reason.replace(h, self.data[h][name_key])
+            _table.append([self.data[i[0]][name_key], i[1], reason])
+        return _table
+
+    def print_recommend(self, table_1, table_2):
+        print('Recommend')
+        self.print_table(table_1, ['Name', 'Value', 'Reason'])
+        self.print_table(table_2, ['Name', 'Value', 'Reason'])
+
+    def pre_calculated(self, h_v, reasons, factor=1.0):
+        h_v = copy.deepcopy(h_v)
+        reasons = copy.deepcopy(reasons)
         h_wr = []
         for h in self.data:
             h_wr.append([h, self.data[h]['win_rate']])
         h_wr = sorted(h_wr, key=lambda x: x[1])
-        self.h_v = self.apply_factor(self.h_v, h_wr, 0.5)
+        h_v = self.apply_factor(h_v, h_wr, 0.5 * factor)
+        reasons[Reasons.N_WIN_RATE] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_WIN_RATE].append(h_wr[i][0])
+        reasons[Reasons.WIN_RATE] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.WIN_RATE].append(h_wr[-i - 1][0])
 
         h_mu = []
         h_mu_dict = {}
@@ -96,14 +122,32 @@ class BanPick(object):
                 h_mu_dict[mu] += -anti_index
             h_mu.append([h, total_pos, total_neg])
         h_mu_pos = sorted(h_mu, key=lambda x: x[1])
-        self.h_v = self.apply_factor(self.h_v, h_mu_pos, 0.3)
+        h_v = self.apply_factor(h_v, h_mu_pos, 0.3 * factor)
+        reasons[Reasons.N_ANTI_INDEX_POS] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_ANTI_INDEX_POS].append(h_mu_pos[i][0])
+        reasons[Reasons.ANTI_INDEX_POS] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.ANTI_INDEX_POS].append(h_mu_pos[-i - 1][0])
         h_mu_neg = sorted(h_mu, key=lambda x: x[2])
-        self.h_v = self.apply_factor(self.h_v, h_mu_neg, 0.3)
+        h_v = self.apply_factor(h_v, h_mu_neg, 0.3 * factor)
+        reasons[Reasons.N_ANTI_INDEX_NEG] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_ANTI_INDEX_NEG].append(h_mu_neg[i][0])
+        reasons[Reasons.ANTI_INDEX_NEG] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.ANTI_INDEX_NEG].append(h_mu_neg[-i - 1][0])
         h_mu = []
         for h in h_mu_dict:
             h_mu.append([h, h_mu_dict[h]])
         h_mu = sorted(h_mu, key=lambda x: x[1])
-        self.h_v = self.apply_factor(self.h_v, h_mu, 0.3)
+        h_v = self.apply_factor(h_v, h_mu, 0.3 * factor)
+        reasons[Reasons.N_ANTI_INDEX] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_ANTI_INDEX].append(h_mu[i][0])
+        reasons[Reasons.ANTI_INDEX] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.ANTI_INDEX].append(h_mu[-i - 1][0])
 
         h_tm = []
         h_tm_dict = {}
@@ -121,25 +165,57 @@ class BanPick(object):
                 h_tm_dict[tm] += coop_index
             h_tm.append([h, total_pos, total_neg])
         h_tm_pos = sorted(h_tm, key=lambda x: x[1])
-        self.h_v = self.apply_factor(self.h_v, h_tm_pos, 0.3)
+        h_v = self.apply_factor(h_v, h_tm_pos, 0.3 * factor)
+        reasons[Reasons.N_COOP_INDEX_POS] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_COOP_INDEX_POS].append(h_tm_pos[i][0])
+        reasons[Reasons.COOP_INDEX_POS] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.COOP_INDEX_POS].append(h_tm_pos[-i - 1][0])
         h_tm_neg = sorted(h_tm, key=lambda x: (x[2], x[1]))
-        self.h_v = self.apply_factor(self.h_v, h_tm_neg, 0.3)
+        h_v = self.apply_factor(h_v, h_tm_neg, 0.3 * factor)
+        reasons[Reasons.N_COOP_INDEX_NEG] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_COOP_INDEX_NEG].append(h_tm_neg[i][0])
+        reasons[Reasons.COOP_INDEX_NEG] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.COOP_INDEX_NEG].append(h_tm_neg[-i - 1][0])
         h_tm = []
         for h in h_tm_dict:
             h_tm.append([h, h_tm_dict[h]])
         h_tm = sorted(h_tm, key=lambda x: x[1])
-        self.h_v = self.apply_factor(self.h_v, h_tm, 0.3)
+        h_v = self.apply_factor(h_v, h_tm, 0.3 * factor)
+        reasons[Reasons.N_COOP_INDEX] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.N_COOP_INDEX].append(h_tm[i][0])
+        reasons[Reasons.COOP_INDEX] = []
+        for i in range(self.reason_n):
+            reasons[Reasons.COOP_INDEX].append(h_tm[-i - 1][0])
+        return h_v, reasons
 
-        self.print_v_list(lang=lang)
-
-    def cal_match(self, match_ups, teammates):
-        _h_v = copy.deepcopy(self.h_v)
+    def cal_match(self, h_v, reasons, match_ups, teammates):
+        _h_v = copy.deepcopy(h_v)
+        reasons = copy.deepcopy(reasons)
+        reasons[Reasons.N_MATCH_UPS] = {}
+        reasons[Reasons.MATCH_UPS] = {}
+        reasons[Reasons.N_TEAMMATES] = {}
+        reasons[Reasons.TEAMMATES] = {}
         for mu in match_ups:
             mu_index = []
             for _mu in self.data[mu]['match_ups']:
                 mu_index.append([_mu, -self.data[mu]['match_ups'][_mu]])
             mu_index = sorted(mu_index, key=lambda x: x[1])
             _h_v = self.apply_factor(_h_v, mu_index, 1.0)
+            for i in range(self.reason_n):
+                if mu_index[i][0] not in reasons[Reasons.N_MATCH_UPS]:
+                    reasons[Reasons.N_MATCH_UPS][mu_index[i][0]] = []
+                if mu not in reasons[Reasons.N_MATCH_UPS][mu_index[i][0]]:
+                    reasons[Reasons.N_MATCH_UPS][mu_index[i][0]].append(mu)
+            for i in range(self.reason_n):
+                if mu_index[-i - 1][0] not in reasons[Reasons.MATCH_UPS]:
+                    reasons[Reasons.MATCH_UPS][mu_index[-i - 1][0]] = []
+                if mu not in reasons[Reasons.MATCH_UPS][mu_index[-i - 1][0]]:
+                    reasons[Reasons.MATCH_UPS][mu_index[-i - 1][0]].append(mu)
 
             mu_index = []
             for h in self.data:
@@ -148,6 +224,16 @@ class BanPick(object):
                 mu_index.append([h, self.data[h]['match_ups'][mu]])
             mu_index = sorted(mu_index, key=lambda x: x[1])
             _h_v = self.apply_factor(_h_v, mu_index, 1.0)
+            for i in range(self.reason_n):
+                if mu_index[i][0] not in reasons[Reasons.N_MATCH_UPS]:
+                    reasons[Reasons.N_MATCH_UPS][mu_index[i][0]] = []
+                if mu not in reasons[Reasons.N_MATCH_UPS][mu_index[i][0]]:
+                    reasons[Reasons.N_MATCH_UPS][mu_index[i][0]].append(mu)
+            for i in range(self.reason_n):
+                if mu_index[-i - 1][0] not in reasons[Reasons.MATCH_UPS]:
+                    reasons[Reasons.MATCH_UPS][mu_index[-i - 1][0]] = []
+                if mu not in reasons[Reasons.MATCH_UPS][mu_index[-i - 1][0]]:
+                    reasons[Reasons.MATCH_UPS][mu_index[-i - 1][0]].append(mu)
 
         for tm in teammates:
             tm_index = []
@@ -155,83 +241,99 @@ class BanPick(object):
                 tm_index.append([_tm, self.data[tm]['match_ups'][_tm]])
             tm_index = sorted(tm_index, key=lambda x: x[1])
             _h_v = self.apply_factor(_h_v, tm_index, 0.8)
-        return _h_v
+            for i in range(self.reason_n):
+                if tm_index[i][0] not in reasons[Reasons.N_TEAMMATES]:
+                    reasons[Reasons.N_TEAMMATES][tm_index[i][0]] = []
+                if tm not in reasons[Reasons.N_TEAMMATES][tm_index[i][0]]:
+                    reasons[Reasons.N_TEAMMATES][tm_index[i][0]].append(tm)
+            for i in range(self.reason_n):
+                if tm_index[-i - 1][0] not in reasons[Reasons.TEAMMATES]:
+                    reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]] = []
+                if tm not in reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]]:
+                    reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]].append(tm)
+        return _h_v, reasons
 
-    def recommend(self, match_ups, teammates, lang=Language.EN):
-        _h_v = self.cal_match(match_ups, teammates)
+    def recommend(self, match_ups, teammates, available=None):
+        if len(match_ups) == 5 and len(teammates) == 5:
+            return
         exclude = []
         exclude.extend(match_ups)
         exclude.extend(teammates)
-        self.print_v_list(exclude=exclude, h_v=_h_v, lang=lang)
+        if len(exclude) == 0:
+            factor = 1.0
+        else:
+            factor = len(exclude) * 0.1
+        reasons = {}
+        _h_v, reasons = self.pre_calculated(self.h_v, reasons, factor)
+        _h_v, reasons = self.cal_match(_h_v, reasons, match_ups, teammates)
+        v_list = self.get_v_list(_h_v, available=available, exclude=exclude)
+        table_1, table_2 = self.get_recommend(v_list, reasons)
+        return _h_v, reasons, v_list, table_1, table_2
 
     def win_rate(self, match_ups, teammates, lang=Language.EN):
+        if len(match_ups) != 5 or len(teammates) != 5:
+            return
         if lang == Language.CN:
-            name_key = 'cn_name'
             wr_text = '胜率'
         else:
-            name_key = 'name'
             wr_text = 'Win rate'
-        _h_v = self.cal_match(match_ups, teammates)
+        reasons = {}
+        _h_v, reasons = self.pre_calculated(self.h_v, reasons)
+        _h_v_1, reasons_1 = self.cal_match(_h_v, reasons, match_ups, teammates)
+        _h_v_2, reasons_2 = self.cal_match(_h_v, reasons, teammates, match_ups)
         table = []
-        theirs_score = []
-        for mu in match_ups:
-            theirs_score.append(_h_v[mu])
-            table.append([self.data[mu][name_key], _h_v[mu]])
-        _theirs_score = sum(theirs_score) / len(theirs_score)
         ours_score = []
         for tm in teammates:
-            ours_score.append(_h_v[tm])
-            table.append([self.data[tm][name_key], _h_v[tm]])
+            ours_score.append(_h_v_1[tm])
+            table.append([tm, _h_v_1[tm],
+                          get_good_reason(tm, reasons_1)])
+        theirs_score = []
+        for mu in match_ups:
+            theirs_score.append(_h_v_2[mu])
+            table.append([mu, _h_v_2[mu],
+                          get_good_reason(mu, reasons_2)])
+        _theirs_score = sum(theirs_score) / len(theirs_score)
+        table = sorted(table, key=lambda x: x[1], reverse=True)
         _ours_score = sum(ours_score) / len(ours_score)
-        wr = _ours_score / (_ours_score + _theirs_score)
-        table.append([wr_text, wr])
-        self.print_table(table, headers=['Name', 'Value'], floatfmt='.4f')
-        return theirs_score, ours_score, wr
+        wr = _ours_score / (_ours_score + _theirs_score) * 100
+        table.append([wr_text, wr, ''])
+        return theirs_score, ours_score, wr, table
+
+    def remove_none(self, match_ups, teammates):
+        _match_ups = []
+        for mu in match_ups:
+            if mu == CNAbbrevHeroes.none:
+                continue
+            _match_ups.append(mu)
+        _teammates = []
+        for tm in teammates:
+            if tm == CNAbbrevHeroes.none:
+                continue
+            _teammates.append(tm)
+        return _match_ups, _teammates
 
 
 def main():
+    match_ups = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
+    teammates = [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none, CNAbbrevHeroes.none,
+                 CNAbbrevHeroes.none]
     lang = Language.CN
     bp = BanPick()
-    bp.print_heroes(lang=lang)
-    bp.pre_calculated(lang=lang)
-    bp.recommend([Heroes.Crystal_Maiden,
-                  Heroes.Lina,
-                  Heroes.Bloodseeker,
-                  Heroes.Batrider,
-                  Heroes.Nyx_Assassin],
-                 [Heroes.Troll_Warlord,
-                  Heroes.Natures_Prophet,
-                  Heroes.Lich,
-                  Heroes.Slardar], lang=Language.EN)
-    bp.recommend([CNHeroes.水晶室女,
-                  CNHeroes.莉娜,
-                  CNHeroes.嗜血狂魔,
-                  CNHeroes.蝙蝠骑士,
-                  CNHeroes.司夜刺客],
-                 [CNHeroes.巨魔战将,
-                  CNHeroes.先知,
-                  CNHeroes.巫妖,
-                  CNHeroes.斯拉达], lang=lang)
-    bp.win_rate([CNHeroes.水晶室女,
-                 CNHeroes.莉娜,
-                 CNHeroes.嗜血狂魔,
-                 CNHeroes.蝙蝠骑士,
-                 CNHeroes.司夜刺客],
-                [CNHeroes.巨魔战将,
-                 CNHeroes.先知,
-                 CNHeroes.巫妖,
-                 CNHeroes.斯拉达,
-                 CNHeroes.噬魂鬼], lang=lang)
-    bp.win_rate([CNHeroes.末日使者,
-                 CNHeroes.主宰,
-                 CNHeroes.沉默术士,
-                 CNHeroes.水晶室女,
-                 CNHeroes.炼金术士],
-                [CNHeroes.冥魂大帝,
-                 CNHeroes.莱恩,
-                 CNHeroes.钢背兽,
-                 CNHeroes.斯拉达,
-                 CNHeroes.宙斯], lang=lang)
+    match_ups, teammates = bp.remove_none(match_ups, teammates)
+    r = bp.recommend(match_ups, teammates)
+    if r is not None:
+        _, _, _, t_1, t_2 = r
+        t_1 = bp.convert_table_lang(t_1, lang)
+        t_2 = bp.convert_table_lang(t_2, lang)
+        bp.print_recommend(t_1, t_2)
+    r = bp.win_rate(match_ups, teammates, lang=lang)
+    if r is not None:
+        _, _, _, table = r
+        table = bp.convert_table_lang(table, lang)
+        bp.print_table(table, headers=['Name', 'Value', 'Reason'])
 
 
 if __name__ == '__main__':

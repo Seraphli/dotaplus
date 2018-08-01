@@ -60,7 +60,7 @@ def process_data(raw_data):
         real_name = nd['hero_real_name']
         name = real_name.replace(' ', '_').replace('\'', '').replace('-', '_')
         lines.append('    {} = "{}"\n'.format(name, nd['hero_name']))
-    lines.append('\nclass CNHeroes(object):\n')
+    lines.append('\n\nclass CNHeroes(object):\n')
     for nd in raw_data['cn_name_dict']:
         real_name = nd['hero_real_name']
         lines.append('    {} = "{}"\n'.format(real_name, nd['hero_name']))
