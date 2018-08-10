@@ -25,7 +25,8 @@ class selectWindow(QWidget, Ui_Form):
         self.show()
 
     def set_btn_icon(self):
-        path = os.path.abspath('./miniheroes')
+        path = os.path.abspath('./res/miniheroes')
+        print(path)
         # self.elder_titan_Btn.setPixmap(QPixmap(path+'/ancient_apparition.png'))
         # self.undying_Btn.setPixmap(QPixmap('/Users/houxiao/workspace/python/dotaplus/gui/res/miniheroes/undying.png'))
         # self.abaddon_Btn.setPixmap(QPixmap('/Users/houxiao/workspace/python/dotaplus/gui/res/miniheroes/abaddon.png'))
@@ -37,8 +38,8 @@ class selectWindow(QWidget, Ui_Form):
             for i in range(layout.count()):
                 btn = layout.itemAt(i).widget()
                 if type(btn)==QLabel:
-                    btn.setPixmap(QPixmap(path+f'/{btn.text()}.png'))
-                    print(btn.objectName()[:-4])
+                    btn.setPixmap(QPixmap(path+f'/{btn.objectName()[:-4]}.png'))
+                    # print(btn.objectName()[:-4])
 
 
 if __name__ == '__main__':
