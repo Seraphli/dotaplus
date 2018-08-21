@@ -4,6 +4,7 @@ from ban_pick import BanPick
 import get_data
 import multiprocessing as mp
 import time
+import json
 
 
 class BPHandler(tornado.web.RequestHandler):
@@ -11,9 +12,9 @@ class BPHandler(tornado.web.RequestHandler):
         self.bp = BanPick()
 
     def post(self):
-        team_no = eval(self.get_argument('team_no'))
-        teams = eval(self.get_argument('teams'))
-        bans = eval(self.get_argument('bans'))
+        team_no = json.loads(self.get_argument('team_no'))
+        teams = json.loads(self.get_argument('teams'))
+        bans = json.loads(self.get_argument('bans'))
         available = list(self.bp.data.keys())
         for ban in bans:
             print(ban)
@@ -27,10 +28,10 @@ class BPHandler(tornado.web.RequestHandler):
         match_ups, teammates = self.bp.remove_none(match_ups, teammates)
         r = self.bp.recommend_dict(match_ups, teammates, available)
         if r is not None:
-            self.write(r)
+            self.write(json.dumps(r))
         r = self.bp.win_rate_dict(match_ups, teammates)
         if r is not None:
-            self.write(r)
+            self.write(json.dumps(r))
 
 
 def update_data():
