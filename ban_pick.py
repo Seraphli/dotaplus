@@ -2,9 +2,8 @@ from tabulate import tabulate
 import json
 import numpy as np
 import copy
-from heroes import Heroes, CNHeroes
 from cn_heroes import CNAbbrevHeroes
-from cfg import Language
+from cfg import Language, MainHeroInterface
 from reason import Reasons, get_good_reason, get_bad_reason
 
 
@@ -94,6 +93,7 @@ class BanPick(object):
     def pre_calculated(self, h_v, reasons, factor=1.0):
         h_v = copy.deepcopy(h_v)
         reasons = copy.deepcopy(reasons)
+        # Based on win rate
         h_wr = []
         for h in self.data:
             h_wr.append([h, self.data[h]['win_rate']])
@@ -106,6 +106,7 @@ class BanPick(object):
         for i in range(self.reason_n):
             reasons[Reasons.WIN_RATE].append(h_wr[-i - 1][0])
 
+        # Based on match up index
         h_mu = []
         h_mu_dict = {}
         for h in self.data:
@@ -122,7 +123,7 @@ class BanPick(object):
                 h_mu_dict[mu] += -anti_index
             h_mu.append([h, total_pos, total_neg])
         h_mu_pos = sorted(h_mu, key=lambda x: x[1])
-        h_v = self.apply_factor(h_v, h_mu_pos, 0.3 * factor)
+        h_v = self.apply_factor(h_v, h_mu_pos, 0.5 * factor)
         reasons[Reasons.N_ANTI_INDEX_POS] = []
         for i in range(self.reason_n):
             reasons[Reasons.N_ANTI_INDEX_POS].append(h_mu_pos[i][0])
@@ -130,7 +131,7 @@ class BanPick(object):
         for i in range(self.reason_n):
             reasons[Reasons.ANTI_INDEX_POS].append(h_mu_pos[-i - 1][0])
         h_mu_neg = sorted(h_mu, key=lambda x: x[2])
-        h_v = self.apply_factor(h_v, h_mu_neg, 0.3 * factor)
+        h_v = self.apply_factor(h_v, h_mu_neg, 0.5 * factor)
         reasons[Reasons.N_ANTI_INDEX_NEG] = []
         for i in range(self.reason_n):
             reasons[Reasons.N_ANTI_INDEX_NEG].append(h_mu_neg[i][0])
@@ -141,7 +142,7 @@ class BanPick(object):
         for h in h_mu_dict:
             h_mu.append([h, h_mu_dict[h]])
         h_mu = sorted(h_mu, key=lambda x: x[1])
-        h_v = self.apply_factor(h_v, h_mu, 0.3 * factor)
+        h_v = self.apply_factor(h_v, h_mu, 0.5 * factor)
         reasons[Reasons.N_ANTI_INDEX] = []
         for i in range(self.reason_n):
             reasons[Reasons.N_ANTI_INDEX].append(h_mu[i][0])
@@ -149,6 +150,7 @@ class BanPick(object):
         for i in range(self.reason_n):
             reasons[Reasons.ANTI_INDEX].append(h_mu[-i - 1][0])
 
+        # Based on teammate index
         h_tm = []
         h_tm_dict = {}
         for h in self.data:
@@ -165,7 +167,7 @@ class BanPick(object):
                 h_tm_dict[tm] += coop_index
             h_tm.append([h, total_pos, total_neg])
         h_tm_pos = sorted(h_tm, key=lambda x: x[1])
-        h_v = self.apply_factor(h_v, h_tm_pos, 0.3 * factor)
+        h_v = self.apply_factor(h_v, h_tm_pos, 0.5 * factor)
         reasons[Reasons.N_COOP_INDEX_POS] = []
         for i in range(self.reason_n):
             reasons[Reasons.N_COOP_INDEX_POS].append(h_tm_pos[i][0])
@@ -173,7 +175,7 @@ class BanPick(object):
         for i in range(self.reason_n):
             reasons[Reasons.COOP_INDEX_POS].append(h_tm_pos[-i - 1][0])
         h_tm_neg = sorted(h_tm, key=lambda x: (x[2], x[1]))
-        h_v = self.apply_factor(h_v, h_tm_neg, 0.3 * factor)
+        h_v = self.apply_factor(h_v, h_tm_neg, 0.5 * factor)
         reasons[Reasons.N_COOP_INDEX_NEG] = []
         for i in range(self.reason_n):
             reasons[Reasons.N_COOP_INDEX_NEG].append(h_tm_neg[i][0])
@@ -184,7 +186,7 @@ class BanPick(object):
         for h in h_tm_dict:
             h_tm.append([h, h_tm_dict[h]])
         h_tm = sorted(h_tm, key=lambda x: x[1])
-        h_v = self.apply_factor(h_v, h_tm, 0.3 * factor)
+        h_v = self.apply_factor(h_v, h_tm, 0.5 * factor)
         reasons[Reasons.N_COOP_INDEX] = []
         for i in range(self.reason_n):
             reasons[Reasons.N_COOP_INDEX].append(h_tm[i][0])
@@ -251,6 +253,39 @@ class BanPick(object):
                     reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]] = []
                 if tm not in reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]]:
                     reasons[Reasons.TEAMMATES][tm_index[-i - 1][0]].append(tm)
+
+        if len(teammates) > 0:
+            team_role = {}
+            for role in MainHeroInterface.ROLE_NAME.values():
+                team_role[role] = 0
+            for tm in teammates:
+                for role in MainHeroInterface.ROLE_NAME.values():
+                    team_role[role] += self.data[tm]['role'][role]
+            _role = copy.deepcopy(team_role)
+            min_role = min(_role, key=team_role.get)
+            max_role = max(_role, key=team_role.get)
+            index = []
+            for h in self.data:
+                value = self.data[h]['role'][min_role]
+                value += -self.data[h]['role'][max_role]
+                index.append([h, value])
+            index = sorted(index, key=lambda x: x[1])
+            _h_v = self.apply_factor(_h_v, index, 1)
+            if team_role['Carry'] >= 4:
+                index = []
+                for h in self.data:
+                    value = -self.data[h]['role']['Carry']
+                    index.append([h, value])
+                index = sorted(index, key=lambda x: x[1])
+                _h_v = self.apply_factor(_h_v, index, 1)
+            if team_role['Support'] >= 5:
+                index = []
+                for h in self.data:
+                    value = -self.data[h]['role']['Support']
+                    index.append([h, value])
+                index = sorted(index, key=lambda x: x[1])
+                _h_v = self.apply_factor(_h_v, index, 1)
+
         return _h_v, reasons
 
     def recommend(self, match_ups, teammates, available=None):
@@ -262,7 +297,7 @@ class BanPick(object):
         if len(exclude) == 0:
             factor = 1.0
         else:
-            factor = len(exclude) * 0.1
+            factor = min(1.0, len(exclude) * 0.2)
         reasons = {}
         _h_v, reasons = self.pre_calculated(self.h_v, reasons, factor)
         _h_v, reasons = self.cal_match(_h_v, reasons, match_ups, teammates)
@@ -311,6 +346,40 @@ class BanPick(object):
                 continue
             _teammates.append(tm)
         return _match_ups, _teammates
+
+
+class BanPickGame(object):
+    def __init__(self, ban_pick, available, teams, team_no):
+        self.bp = ban_pick
+        self.available = available
+        # remove none before initialize
+        self.teams = self.bp.remove_none(*teams)
+        self.team_no = team_no
+
+    def get_moves(self):
+        if len(self.teams[0]) == 5 and len(self.teams[1]) == 5:
+            return []
+        return copy.deepcopy(self.available)
+
+    def do_move(self, move):
+        self.available.remove(move)
+        if len(self.teams[0]) < 5:
+            self.teams[0].append(move)
+        elif len(self.teams[1]) < 5:
+            self.teams[1].append(move)
+
+    def clone(self):
+        return BanPickGame(self.bp, copy.deepcopy(self.available),
+                           copy.deepcopy(self.teams), self.team_no)
+
+    def is_game_over(self):
+        return sum([len(t) for t in self.teams if t != 'none']) == 10
+
+    def get_result(self):
+        teammates = self.teams[self.team_no]
+        match_ups = self.teams[1 - self.team_no]
+        _, _, wr, _ = self.bp.win_rate(match_ups, teammates)
+        return wr
 
 
 def main():

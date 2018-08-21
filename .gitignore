@@ -114,3 +114,5 @@ venv.bak/
 
 *.json
 screenshot.png
+temp_ss.png
+!role.json

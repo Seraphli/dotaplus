@@ -36,15 +36,12 @@ def crop_hero_template_img():
 
 
 def crop_hero_up_template_image():
-    up_w, up_h = HeroImage.I_UP_W, HeroImage.I_UP_H
     with open('data.json', 'r') as f:
         data = json.load(f)
     for h in data:
-        path = get_path('res/heroes') + '/{}.png'.format(h)
+        path = get_path('res/hero_up_img') + '/{}.png'.format(h)
         img = cv2.imread(path)
-        res = cv2.resize(img, (up_w, up_h), interpolation=cv2.INTER_AREA)
-        res = res[int(up_h / 2 - 10):int(up_h / 2 + 10),
-              int(up_w / 2 - 10):int(up_w / 2 + 10)]
+        res = img[0:20, 0:20]
         cv2.imwrite(get_path('res/hero_up') + '/{}.png'.format(h), res)
 
 
@@ -84,7 +81,7 @@ class HeroMatchCV(object):
         for h, template in self.up_templates.items():
             res = cv2.matchTemplate(crop_img, template, cv2.TM_SQDIFF_NORMED)
             min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-            if min_val < 0.05:
+            if min_val < 0.001:
                 return h
 
     def find_heroes(self):

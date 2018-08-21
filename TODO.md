@@ -2,8 +2,13 @@
 - [x] delete json first and modify json after generation
 - [ ] gui interface for ban pick
 - [x] heroes' chinese name and abbreviation
-- [ ] heroes' abbreviation
+- [x] heroes' abbreviation
 - [x] auto generate hero name dict py script when getting data
 - [ ] web gui interface
-- [ ] recommend reason
-- [ ] generate output string and copy to clipboard
+- [x] recommend reason
+- [x] generate output string and copy to clipboard
+- [x] hero role
+- [x] dota2 wiki counters data
+- [x] use role and counters data for ban pick
+- [x] use mcts for ban pick
+- [ ] server api

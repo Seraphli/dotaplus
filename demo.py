@@ -11,6 +11,8 @@ def main():
     o = CNOutput()
     bp = BanPick()
     available, teams = cv.find_heroes()
+    print('Available: {}'.format(len(available)))
+    print('Teams: {}'.format(teams))
     teammates = teams[team_no]
     match_ups = teams[1 - team_no]
     match_ups, teammates = bp.remove_none(match_ups, teammates)
