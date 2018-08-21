@@ -305,6 +305,18 @@ class BanPick(object):
         table_1, table_2 = self.get_recommend(v_list, reasons)
         return _h_v, reasons, v_list, table_1, table_2
 
+    def recommend_dict(self, match_ups, teammates, available=None):
+        r = self.recommend(match_ups, teammates, available)
+        if r:
+            _h_v, reasons, v_list, table_1, table_2 = r
+            return {
+                'h_v': _h_v,
+                'reasons': reasons,
+                'v_list': v_list,
+                'table_1': table_1,
+                'table_2': table_2
+            }
+
     def win_rate(self, match_ups, teammates, lang=Language.EN):
         if len(match_ups) != 5 or len(teammates) != 5:
             return
@@ -333,6 +345,17 @@ class BanPick(object):
         wr = _ours_score / (_ours_score + _theirs_score) * 100
         table.append([wr_text, wr, ''])
         return theirs_score, ours_score, wr, table
+
+    def win_rate_dict(self, match_ups, teammates, lang=Language.EN):
+        r = self.win_rate(match_ups, teammates, lang)
+        if r:
+            theirs_score, ours_score, wr, table = r
+            return {
+                'theirs_score': theirs_score,
+                'ours_score': ours_score,
+                'wr': wr,
+                'table': table
+            }
 
     def remove_none(self, match_ups, teammates):
         _match_ups = []

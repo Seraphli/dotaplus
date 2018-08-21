@@ -11,4 +11,4 @@
 - [x] dota2 wiki counters data
 - [x] use role and counters data for ban pick
 - [x] use mcts for ban pick
-- [ ] server api
+- [x] server api
