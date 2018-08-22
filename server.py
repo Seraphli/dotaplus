@@ -10,8 +10,13 @@ import json
 class BPHandler(tornado.web.RequestHandler):
     def initialize(self):
         self.bp = BanPick()
+        self.last_time = time.time()
 
     def post(self):
+        if time.time() - self.last_time > 43200:
+            self.bp = BanPick()
+            self.last_time = time.time()
+
         team_no = json.loads(self.get_argument('team_no'))
         teams = json.loads(self.get_argument('teams'))
         bans = json.loads(self.get_argument('bans'))
@@ -37,19 +42,20 @@ class BPHandler(tornado.web.RequestHandler):
 def update_data():
     print('Update data')
     get_data.main()
-    time.sleep(60)
+    print('Update complete')
+    time.sleep(43200)
 
 
 def make_app():
     return tornado.web.Application([
-        (r"/bp", BPHandler),
+        (r'/bp', BPHandler),
     ])
 
 
 if __name__ == "__main__":
     mp.Process(target=update_data).start()
-    time.sleep(60)
+    time.sleep(20)
     print('Server start')
     app = make_app()
-    app.listen(8888)
+    app.listen(30207)
     tornado.ioloop.IOLoop.current().start()
