@@ -1,0 +1,4 @@
+tornado==5.1
+scrapy==1.5.1
+tabulate==0.8.2
+numpy==1.15.1
