@@ -1,4 +1,3 @@
-import pyautogui
 import time
 from cfg import MainHeroInterface
 from hero_index import HERO_INDEX
@@ -7,6 +6,7 @@ import json
 
 
 def get_one_hero_role(c, row, col):
+    import pyautogui
     # Click on hero interface
     pyautogui.click(465, 30, button='left')
     pyautogui.click(450, 90, button='left')
@@ -69,6 +69,7 @@ def insert_into_data():
 
 
 def main():
+    import pyautogui
     pyautogui.PAUSE = 1
     time.sleep(3)
     get_hero_role()
