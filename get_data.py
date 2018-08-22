@@ -8,7 +8,6 @@ from scrapy.utils.project import get_project_settings
 from spider.dotaplus.dotaplus.spiders.dotamax import NameDictSpider, \
     CNNameDictSpider, WinRateSpider, MatchUpsSpider, TeammatesSpider
 from spider.dotaplus.dotaplus.spiders.dotawiki import CountersSpider
-from get_hero_role import insert_into_data
 
 
 def remove_json(file_names):
@@ -104,6 +103,17 @@ def process_data(raw_data):
         generate_hero_py(raw_data)
 
 
+def insert_role_into_data():
+    with open('role.json', 'r') as f:
+        roles = json.load(f)
+    with open('data.json', 'r') as f:
+        data = json.load(f)
+    for k in data.keys():
+        data[k]['role'] = roles[k]
+    with open('data.json', 'w') as f:
+        json.dump(data, f)
+
+
 def main():
     spiders = [NameDictSpider, CNNameDictSpider, WinRateSpider,
                MatchUpsSpider, TeammatesSpider, CountersSpider]
@@ -113,7 +123,7 @@ def main():
     raw_data = crawl(spiders)
     os.chdir(original_cwd)
     process_data(raw_data)
-    insert_into_data()
+    insert_role_into_data()
 
 
 if __name__ == '__main__':

@@ -1,12 +1,13 @@
 import time
 from cfg import MainHeroInterface
 from hero_index import HERO_INDEX
-import cv2
+from get_data import insert_role_into_data
 import json
 
 
 def get_one_hero_role(c, row, col):
     import pyautogui
+    import cv2
     # Click on hero interface
     pyautogui.click(465, 30, button='left')
     pyautogui.click(450, 90, button='left')
@@ -57,23 +58,12 @@ def get_hero_role():
         json.dump(roles, f)
 
 
-def insert_into_data():
-    with open('role.json', 'r') as f:
-        roles = json.load(f)
-    with open('data.json', 'r') as f:
-        data = json.load(f)
-    for k in data.keys():
-        data[k]['role'] = roles[k]
-    with open('data.json', 'w') as f:
-        json.dump(data, f)
-
-
 def main():
     import pyautogui
     pyautogui.PAUSE = 1
     time.sleep(3)
     get_hero_role()
-    insert_into_data()
+    insert_role_into_data()
 
 
 if __name__ == '__main__':
