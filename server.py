@@ -19,15 +19,7 @@ class BPHandler(tornado.web.RequestHandler):
 
         team_no = json.loads(self.get_argument('team_no'))
         teams = json.loads(self.get_argument('teams'))
-        bans = json.loads(self.get_argument('bans'))
-        available = list(self.bp.data.keys())
-        for ban in bans:
-            print(ban)
-            available.remove(ban)
-        for team in teams:
-            for h in team:
-                if h in available:
-                    available.remove(h)
+        available = json.loads(self.get_argument('available'))
         teammates = teams[team_no]
         match_ups = teams[1 - team_no]
         match_ups, teammates = self.bp.remove_none(match_ups, teammates)

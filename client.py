@@ -2,6 +2,9 @@ import urllib
 import tornado.httpclient
 from cn_heroes import CNAbbrevHeroes
 import json
+from ban_pick import BanPick
+
+bp = BanPick()
 
 team_no = 0
 teams = [[CNAbbrevHeroes.none, CNAbbrevHeroes.none,
@@ -12,10 +15,18 @@ teams = [[CNAbbrevHeroes.none, CNAbbrevHeroes.none,
           CNAbbrevHeroes.none]]
 bans = []
 
+available = list(bp.data.keys())
+for ban in bans:
+    available.remove(ban)
+for team in teams:
+    for h in team:
+        if h in available:
+            available.remove(h)
+
 post_data = {
     'team_no': json.dumps(team_no),
     'teams': json.dumps(teams),
-    'bans': json.dumps(bans)
+    'available': json.dumps(available)
 }
 body = urllib.parse.urlencode(post_data)
 http_client = tornado.httpclient.HTTPClient()
