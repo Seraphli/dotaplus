@@ -857,6 +857,17 @@
     "Pusher": 0,
     "Initiator": 0
   },
+  "grimstroke": {
+    "Carry": 0,
+    "Support": 1,
+    "Nuker": 2,
+    "Disabler": 2,
+    "Jungler": 0,
+    "Durable": 0,
+    "Escape": 1,
+    "Pusher": 0,
+    "Initiator": 0
+  },
   "zuus": {
     "Carry": 0,
     "Support": 0,

@@ -14,6 +14,8 @@ def crop_hero_img():
     for c, rows in enumerate(hero_num):
         for row, col_n in enumerate(rows):
             for col in range(col_n):
+                # if not (c == 0 and row == 0 and col == 11):
+                #     continue
                 hero_name = HERO_INDEX[str((c, row, col))]
                 _x = x + col * d_col
                 _y = y + row * d_row + c * d_class
@@ -27,6 +29,8 @@ def crop_hero_template_img():
     for c, rows in enumerate(Interface.HERO_NUM):
         for row, col_n in enumerate(rows):
             for col in range(col_n):
+                # if not (c == 0 and row == 0 and col == 11):
+                #     continue
                 hero_name = HERO_INDEX[str((c, row, col))]
                 img = cv2.imread('res/origin/{}.png'.format(hero_name))
                 crop_img = img[h - 20:h,
@@ -39,6 +43,8 @@ def crop_hero_up_template_image():
     with open('data.json', 'r') as f:
         data = json.load(f)
     for h in data:
+        # if not (h == 'huskar'):
+        #     continue
         path = get_path('res/hero_up_img') + '/{}.png'.format(h)
         img = cv2.imread(path)
         res = img[0:20, 0:20]
@@ -109,6 +115,9 @@ class HeroMatchCV(object):
 
 
 def main():
+    # crop_hero_img()
+    # crop_hero_template_img()
+    # crop_hero_up_template_image()
     cv = HeroMatchCV()
     available, teams = cv.find_heroes()
     print(len(available), teams)

@@ -559,3 +559,6 @@ class CNAbbrevHeroes(object):
     穿山甲 = "pangolier"
     滚滚 = "pangolier"
     石鳞剑士 = "pangolier"
+    grimstroke = "grimstroke"
+    天涯墨客 = "grimstroke"
+    笔仙 = "grimstroke"

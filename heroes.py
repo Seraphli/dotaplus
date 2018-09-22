@@ -114,6 +114,7 @@ class Heroes(object):
     Monkey_King = "monkey_king"
     Dark_Willow = "dark_willow"
     Pangolier = "pangolier"
+    Grimstroke = "grimstroke"
 
 
 class CNHeroes(object):
@@ -232,3 +233,4 @@ class CNHeroes(object):
     齐天大圣 = "monkey_king"
     邪影芳灵 = "dark_willow"
     石鳞剑士 = "pangolier"
+    天涯墨客 = "grimstroke"

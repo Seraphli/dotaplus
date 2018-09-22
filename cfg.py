@@ -6,13 +6,13 @@ class Language(object):
 class Interface(object):
     X, Y, W, H = 169, 189, 46, 72
     D_COL, D_ROW, D_CLASS = 52, 80, 184
-    HERO_NUM = [[21, 16], [21, 16], [21, 20]]
+    HERO_NUM = [[21, 16], [21, 16], [21, 21]]
 
 
 class MainHeroInterface(object):
     X, Y, W, H = 347, 155, 46, 92
     D_COL, D_ROW, D_CLASS = 56, 100, 224
-    HERO_NUM = [[22, 15], [22, 15], [22, 19]]
+    HERO_NUM = [[22, 15], [22, 15], [22, 20]]
     I_X, I_Y, I_W, I_H = 1142, 422, 28, 9
     I_D_COL, I_D_ROW, I_D_CLASS = 33, 20, 298
     I_NUM = [[3, 5], [3, 4]]

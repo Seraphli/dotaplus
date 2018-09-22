@@ -37,10 +37,19 @@ class CountersSpider(scrapy.Spider):
                                   'a::attr(title)').extract()
         good_against = all_hero.index(split_hero[1])
         work_well = len(all_hero) - all_hero[::-1].index(split_hero[2]) - 1
+        bad_list = all_hero[:good_against]
+        if 'Unknown Hero' in bad_list:
+            bad_list.remove('Unknown Hero')
+        good_list = all_hero[good_against:work_well]
+        if 'Unknown Hero' in good_list:
+            good_list.remove('Unknown Hero')
+        work_well_list = all_hero[work_well:]
+        if 'Unknown Hero' in work_well_list:
+            work_well_list.remove('Unknown Hero')
         counters = {
-            'bad_against': all_hero[:good_against],
-            'good_against': all_hero[good_against:work_well],
-            'work_well': all_hero[work_well:]
+            'bad_against': bad_list,
+            'good_against': good_list,
+            'work_well': work_well_list
         }
         yield {
             'hero_name': hero_name,
