@@ -36,6 +36,7 @@ def update_data():
     get_data.main()
     print('Update complete')
     time.sleep(43200)
+    mp.Process(target=update_data).start()
 
 
 def make_app():
