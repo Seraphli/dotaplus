@@ -25,7 +25,7 @@ class CNOutput(object):
 
         return abbrev
 
-    def recommend(self, match_ups, teammates, available=None):
+    def recommend_str(self, match_ups, teammates, available=None):
         if len(match_ups) == 5 and len(teammates) == 5:
             return
         _h_v, reasons, v_list, _, _ = self.bp.recommend(
@@ -38,17 +38,21 @@ class CNOutput(object):
             h_list.append(self.get_abbrev_name(h))
         msg += ','.join(h_list)
         msgs.append(msg)
-        print(msg)
         msg = '不推荐:'
         h_list = []
         for i in range(15):
             h = v_list[-i - 1][0]
             h_list.append(self.get_abbrev_name(h))
         msg += ','.join(h_list)
-        print(msg)
-        pyperclip.copy(';'.join(msgs))
+        msgs.append(msg)
+        return ';'.join(msgs)
 
-    def win_rate(self, match_ups, teammates):
+    def recommend(self, match_ups, teammates, available=None):
+        msg = self.recommend_str(match_ups, teammates, available)
+        print(msg)
+        pyperclip.copy(msg.split(';')[0])
+
+    def win_rate_str(self, match_ups, teammates):
         if len(match_ups) != 5 or len(teammates) != 5:
             return
         theirs_score, ours_score, wr, table = self.bp.win_rate(
@@ -58,6 +62,10 @@ class CNOutput(object):
         for i in range(3):
             h_list.append(self.get_abbrev_name(table[i][0]))
         msg += ','.join(h_list)
+        return msg
+
+    def win_rate(self, match_ups, teammates):
+        msg = self.win_rate_str(match_ups, teammates)
         print(msg)
         pyperclip.copy(msg)
 

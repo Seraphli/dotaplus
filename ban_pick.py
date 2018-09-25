@@ -29,7 +29,11 @@ class BanPick(object):
         table = []
         for h in self.data:
             table.append([self.data[h][name_key]])
-        self.print_table(table, ['Name'])
+        print(self.generate_table(table, ['Name']))
+
+    def generate_table(self, table, headers, floatfmt='.2f'):
+        return tabulate(table, headers=headers, tablefmt='psql',
+                        floatfmt=floatfmt, showindex='always')
 
     def print_table(self, table, headers, floatfmt='.2f'):
         print(tabulate(table, headers=headers, tablefmt='psql',
@@ -87,8 +91,9 @@ class BanPick(object):
 
     def print_recommend(self, table_1, table_2):
         print('Recommend')
-        self.print_table(table_1, ['Name', 'Value', 'Reason'])
-        self.print_table(table_2, ['Name', 'Value', 'Reason'])
+        print(self.generate_table(table_1, ['Name', 'Value', 'Reason']))
+        print('Not Recommend')
+        print(self.generate_table(table_2, ['Name', 'Value', 'Reason']))
 
     def pre_calculated(self, h_v, reasons, factor=1.0):
         h_v = copy.deepcopy(h_v)
@@ -314,7 +319,11 @@ class BanPick(object):
                 'reasons': reasons,
                 'v_list': v_list,
                 'table_1': table_1,
-                'table_2': table_2
+                'table_2': table_2,
+                'g_table_1': self.generate_table(table_1,
+                                                 ['Name', 'Value', 'Reason']),
+                'g_table_2': self.generate_table(table_2,
+                                                 ['Name', 'Value', 'Reason']),
             }
 
     def win_rate(self, match_ups, teammates, lang=Language.EN):
@@ -354,7 +363,9 @@ class BanPick(object):
                 'theirs_score': theirs_score,
                 'ours_score': ours_score,
                 'wr': wr,
-                'table': table
+                'table': table,
+                'g_table': self.generate_table(table,
+                                               ['Name', 'Value', 'Reason']),
             }
 
     def remove_none(self, match_ups, teammates):
