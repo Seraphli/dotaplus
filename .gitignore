@@ -116,3 +116,4 @@ venv.bak/
 screenshot.png
 temp_ss.png
 !role.json
+!custom_data.json

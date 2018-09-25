@@ -23,3 +23,19 @@ def get_path(name='log', abspath=None, relative_path=None, _file=None):
     if not os.path.exists(directory):
         os.makedirs(directory)
     return directory
+
+
+def generate_hero_json():
+    import json
+
+    with open('data.json') as f:
+        data = json.load(f)
+    print(data.keys())
+
+
+def main():
+    generate_hero_json()
+
+
+if __name__ == '__main__':
+    main()
