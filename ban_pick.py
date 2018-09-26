@@ -4,7 +4,7 @@ import numpy as np
 import copy
 from cn_heroes import CNAbbrevHeroes
 from cfg import Language, MainHeroInterface
-from reason import Reasons, get_good_reason, get_bad_reason
+from reason import Reasons, get_good_reason_cn, get_bad_reason_cn
 
 
 class BanPick(object):
@@ -64,12 +64,12 @@ class BanPick(object):
         for i in range(n):
             h = v_list[i][0]
             table_1.append([v_list[i][0], v_list[i][1],
-                            get_good_reason(h, reasons)])
+                            get_good_reason_cn(h, reasons, self.data)])
         table_2 = []
         for i in range(n):
             h = v_list[-i - 1][0]
             table_2.append([v_list[-i - 1][0], v_list[-i - 1][1],
-                            get_bad_reason(h, reasons)])
+                            get_bad_reason_cn(h, reasons, self.data)])
         return table_1, table_2
 
     def convert_table_lang(self, table, lang=Language.EN):
@@ -314,6 +314,8 @@ class BanPick(object):
         r = self.recommend(match_ups, teammates, available)
         if r:
             _h_v, reasons, v_list, table_1, table_2 = r
+            table_1 = self.convert_table_to_cn(table_1)
+            table_2 = self.convert_table_to_cn(table_2)
             return {
                 'h_v': _h_v,
                 'reasons': reasons,
@@ -342,12 +344,12 @@ class BanPick(object):
         for tm in teammates:
             ours_score.append(_h_v_1[tm])
             table.append([tm, _h_v_1[tm],
-                          get_good_reason(tm, reasons_1)])
+                          get_good_reason_cn(tm, reasons_1, self.data)])
         theirs_score = []
         for mu in match_ups:
             theirs_score.append(_h_v_2[mu])
             table.append([mu, _h_v_2[mu],
-                          get_good_reason(mu, reasons_2)])
+                          get_good_reason_cn(mu, reasons_2, self.data)])
         _theirs_score = sum(theirs_score) / len(theirs_score)
         table = sorted(table, key=lambda x: x[1], reverse=True)
         _ours_score = sum(ours_score) / len(ours_score)
@@ -355,10 +357,19 @@ class BanPick(object):
         table.append([wr_text, wr, ''])
         return theirs_score, ours_score, wr, table
 
+    def convert_table_to_cn(self, table):
+        heroes = list(self.data.keys())
+        new_table = copy.deepcopy(table)
+        for line in new_table:
+            if line[0] in heroes:
+                line[0] = self.data[line[0]]['cn_name']
+        return new_table
+
     def win_rate_dict(self, match_ups, teammates, lang=Language.EN):
         r = self.win_rate(match_ups, teammates, lang)
         if r:
             theirs_score, ours_score, wr, table = r
+            table = self.convert_table_to_cn(table)
             return {
                 'theirs_score': theirs_score,
                 'ours_score': ours_score,

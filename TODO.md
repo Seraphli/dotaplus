@@ -12,3 +12,5 @@
 - [x] use role and counters data for ban pick
 - [x] use mcts for ban pick
 - [x] server api
+- [ ] refresh data on server
+- [ ] separate skill level in dotamax data
