@@ -76,7 +76,7 @@ class HeroMatchCV(object):
         else:
             return False
 
-    def find_up_hero(self, img, team, num):
+    def find_up_hero(self, img, team, num, available):
         if team == 0:
             x = HeroImage.T_0_X + num * HeroImage.D_HERO
             y = HeroImage.T_0_Y
@@ -85,10 +85,12 @@ class HeroMatchCV(object):
             y = HeroImage.T_1_Y
         crop_img = img[y:y + HeroImage.UP_H, x:x + HeroImage.UP_W]
         for h, template in self.up_templates.items():
-            res = cv2.matchTemplate(crop_img, template, cv2.TM_SQDIFF_NORMED)
-            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-            if min_val < 0.001:
-                return h
+            if h not in available:
+                res = cv2.matchTemplate(crop_img, template,
+                                        cv2.TM_SQDIFF_NORMED)
+                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+                if min_val < 0.001:
+                    return h
 
     def find_heroes(self):
         available = []
@@ -106,7 +108,7 @@ class HeroMatchCV(object):
         teams = [[], []]
         for i in range(2):
             for j in range(5):
-                res = self.find_up_hero(img, i, j)
+                res = self.find_up_hero(img, i, j, available)
                 if res:
                     teams[i].append(res)
                 else:
