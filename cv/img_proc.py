@@ -1,8 +1,8 @@
 import cv2
 from util import get_path
 from PIL import ImageGrab
-from cfg import Interface, HeroImage
-from hero_index import HERO_INDEX
+from data.cfg import Interface, HeroImage
+from data.hero_index import HERO_INDEX
 import json
 
 

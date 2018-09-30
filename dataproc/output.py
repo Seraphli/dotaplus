@@ -1,8 +1,8 @@
-from ban_pick import BanPick
-from cfg import Language
-from cn_heroes import CNAbbrevHeroes
+from dataproc.ban_pick import BanPick
+from data.cfg import Language
+from data.cn_heroes import CNAbbrevHeroes
 import pyperclip
-from custom_data import CN_ABBREV_DICT
+from dataproc.custom_data import CN_ABBREV_DICT
 
 
 class CNOutput(object):

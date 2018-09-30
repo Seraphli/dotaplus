@@ -1,6 +1,6 @@
 - [x] actual name and href
 - [x] delete json first and modify json after generation
-- [ ] gui interface for ban pick
+- [x] gui interface for ban pick
 - [x] heroes' chinese name and abbreviation
 - [x] heroes' abbreviation
 - [x] auto generate hero name dict py script when getting data
@@ -13,4 +13,5 @@
 - [x] use mcts for ban pick
 - [x] server api
 - [ ] refresh data on server
-- [ ] separate skill level in dotamax data
+- [x] separate skill level in dotamax data
+- [ ] update API

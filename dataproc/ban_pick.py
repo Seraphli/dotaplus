@@ -2,9 +2,9 @@ from tabulate import tabulate
 import json
 import numpy as np
 import copy
-from cn_heroes import CNAbbrevHeroes
-from cfg import Language, MainHeroInterface
-from reason import Reasons, get_good_reason_cn, get_bad_reason_cn
+from data.cn_heroes import CNAbbrevHeroes
+from data.cfg import Language, MainHeroInterface
+from dataproc.reason import Reasons, get_good_reason_cn, get_bad_reason_cn
 
 
 class BanPick(object):

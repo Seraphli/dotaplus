@@ -1,8 +1,8 @@
 import urllib
 import tornado.httpclient
-from cn_heroes import CNAbbrevHeroes
+from data.cn_heroes import CNAbbrevHeroes
 import json
-from ban_pick import BanPick
+from dataproc.ban_pick import BanPick
 
 bp = BanPick()
 

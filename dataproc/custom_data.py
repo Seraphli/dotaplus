@@ -1,5 +1,5 @@
 import codecs
-from cfg import Interface
+from data.cfg import Interface
 from urllib.request import urlretrieve
 import json
 from util import get_path

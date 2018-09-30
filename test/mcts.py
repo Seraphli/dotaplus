@@ -1,7 +1,7 @@
 import random
 from math import sqrt, log
-from ban_pick import BanPickGame, BanPick
-from img_proc import HeroMatchCV
+from dataproc.ban_pick import BanPickGame, BanPick
+from cv.img_proc import HeroMatchCV
 from tqdm import trange
 import sys
 

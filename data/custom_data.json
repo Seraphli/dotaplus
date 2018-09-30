@@ -818,5 +818,23 @@
       6
     ],
     "D_HERO": 124
+  },
+  "dotamax": {
+    "server": {
+      "all": "全部",
+      "cn": "中国",
+      "world": "全球"
+    },
+    "skill": {
+      "all": "全部",
+      "vh": "VeryHigh",
+      "h": "High",
+      "n": "Normal"
+    },
+    "ladder": {
+      "all": "全部",
+      "y": "天梯",
+      "n": "普通"
+    }
   }
 }

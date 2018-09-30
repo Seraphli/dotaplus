@@ -1,28 +1,16 @@
-from output import CNOutput
-from cfg import Language
-from ban_pick import BanPick
-from cn_heroes import CNAbbrevHeroes
+from dataproc.output import CNOutput
+from data.cfg import Language
+from dataproc.ban_pick import BanPick
+from cv.img_proc import HeroMatchCV
 
 
 def main():
     team_no = 0
-    teams = [[CNAbbrevHeroes.none, CNAbbrevHeroes.none,
-              CNAbbrevHeroes.none, CNAbbrevHeroes.none,
-              CNAbbrevHeroes.none],
-             [CNAbbrevHeroes.none, CNAbbrevHeroes.none,
-              CNAbbrevHeroes.none, CNAbbrevHeroes.none,
-              CNAbbrevHeroes.none]]
-    bans = []
     lang = Language.CN
+    cv = HeroMatchCV()
     o = CNOutput()
     bp = BanPick()
-    available = list(bp.data.keys())
-    for ban in bans:
-        available.remove(ban)
-    for team in teams:
-        for h in team:
-            if h in available:
-                available.remove(h)
+    available, teams = cv.find_heroes()
     print('Available: {}'.format(len(available)))
     print('Teams: {}'.format(teams))
     teammates = teams[team_no]

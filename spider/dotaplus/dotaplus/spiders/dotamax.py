@@ -1,6 +1,12 @@
 import scrapy
 
 
+class DotamaxCfg(object):
+    Server = ['all', 'cn', 'world']
+    Skill = ['all', 'vh', 'h', 'n']
+    Ladder = ['all', 'y', 'n']
+
+
 class NameDictSpider(scrapy.Spider):
     name = 'name_dict'
     allowed_domains = ['www.dotamax.com']
@@ -87,7 +93,36 @@ class WinRateSpider(scrapy.Spider):
             _wr = win_rate[idx].replace('width:', '').replace('%;', '')
             yield {
                 'hero_name': hero_name,
-                'win_rate': float(_wr)
+                'win_rate_all_all_all': float(_wr)
+            }
+        for server in DotamaxCfg.Server[1:]:
+            for skill in DotamaxCfg.Skill[1:]:
+                for ladder in DotamaxCfg.Ladder[1:]:
+                    url = '/hero/rate/?server={}&skill={}&ladder={}'. \
+                        format(server, skill, ladder)
+                    request = response.follow(
+                        url, callback=self.parse_other)
+                    request.meta['cfg'] = '_'.join([server, skill, ladder])
+                    yield request
+
+    def parse_other(self, response):
+        cfg = response.meta['cfg']
+        hero = response.css(
+            'body > div.maxtopbar > div.main-shadow-box > '
+            'div.main-container > div.container.xuning-box > '
+            'table > tbody > tr::attr(onclick)').extract()
+        win_rate = response.css(
+            'body > div.maxtopbar > div.main-shadow-box > '
+            'div.main-container > div.container.xuning-box > '
+            'table > tbody > tr > td > '
+            'div.segment.segment-green::attr(style)').extract()
+        for idx, h in enumerate(hero):
+            url = h.replace('DoNav(\'', '').replace('\')', '')
+            hero_name = url.replace('/hero/detail/', '')
+            _wr = win_rate[idx].replace('width:', '').replace('%;', '')
+            yield {
+                'hero_name': hero_name,
+                'win_rate_' + cfg: float(_wr)
             }
 
 
@@ -110,12 +145,20 @@ class MatchUpsSpider(scrapy.Spider):
             url = h.replace('DoNav(\'', '').replace('\')', '')
             hero_name = url.replace('/hero/detail/', '')
             anti_url = '/hero/detail/match_up_anti/{}/'.format(hero_name)
-            request = response.follow(anti_url, callback=self.parse_matchups)
-            request.meta['hero_name'] = hero_name
-            yield request
+            for server in DotamaxCfg.Server[1:]:
+                for skill in DotamaxCfg.Skill[1:]:
+                    for ladder in DotamaxCfg.Ladder[1:]:
+                        cfg_url = '?server={}&skill={}&ladder={}'. \
+                            format(server, skill, ladder)
+                        request = response.follow(
+                            anti_url + cfg_url, callback=self.parse_matchups)
+                        request.meta['hero_name'] = hero_name
+                        request.meta['cfg'] = '_'.join([server, skill, ladder])
+                        yield request
 
     def parse_matchups(self, response):
         hero_name = response.meta['hero_name']
+        cfg = response.meta['cfg']
         anti_index = response.css(
             'body > div.maxtopbar > div.main-shadow-box > '
             'div.main-container > div.container.xuning-box > '
@@ -132,7 +175,7 @@ class MatchUpsSpider(scrapy.Spider):
             match_ups[anti_hero_name] = float(anti_index[idx].replace('%', ''))
         yield {
             'hero_name': hero_name,
-            'match_ups': match_ups
+            'match_ups_' + cfg: match_ups
         }
 
 
@@ -155,12 +198,20 @@ class TeammatesSpider(scrapy.Spider):
             url = h.replace('DoNav(\'', '').replace('\')', '')
             hero_name = url.replace('/hero/detail/', '')
             comb_url = '/hero/detail/match_up_comb/{}/'.format(hero_name)
-            request = response.follow(comb_url, callback=self.parse_teammates)
-            request.meta['hero_name'] = hero_name
-            yield request
+            for server in DotamaxCfg.Server[1:]:
+                for skill in DotamaxCfg.Skill[1:]:
+                    for ladder in DotamaxCfg.Ladder[1:]:
+                        cfg_url = '?server={}&skill={}&ladder={}'. \
+                            format(server, skill, ladder)
+                        request = response.follow(
+                            comb_url + cfg_url, callback=self.parse_teammates)
+                        request.meta['hero_name'] = hero_name
+                        request.meta['cfg'] = '_'.join([server, skill, ladder])
+                        yield request
 
     def parse_teammates(self, response):
         hero_name = response.meta['hero_name']
+        cfg = response.meta['cfg']
         coop_index = response.css(
             'body > div.maxtopbar > div.main-shadow-box > '
             'div.main-container > div.container.xuning-box > '
@@ -177,5 +228,5 @@ class TeammatesSpider(scrapy.Spider):
             teammates[coop_hero_name] = float(coop_index[idx].replace('%', ''))
         yield {
             'hero_name': hero_name,
-            'teammates': teammates
+            'teammates_' + cfg: teammates
         }

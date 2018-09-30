@@ -1,10 +1,12 @@
-def get_path(name='log', abspath=None, relative_path=None, _file=None):
+def get_path(name='log', abspath=None, relative_path=None,
+             _file=None, parent=False):
     """Create path if path don't exist
     Args:
         name: folder name
         abspath: absolute path to be prefix
         relative_path: relative path that can be convert into absolute path
         _file: use directory based on _file
+        parent: whether the path is in the parent folder
     Returns: Path of the folder
     """
     import os
@@ -15,14 +17,29 @@ def get_path(name='log', abspath=None, relative_path=None, _file=None):
             os.path.abspath(relative_path), name))
     else:
         if _file:
-            directory = os.path.abspath(
-                os.path.join(os.path.dirname(_file), name))
+            if parent:
+                directory = os.path.abspath(
+                    os.path.join(os.path.dirname(_file), os.pardir, name))
+            else:
+                directory = os.path.abspath(
+                    os.path.join(os.path.dirname(_file), name))
         else:
-            directory = os.path.abspath(
-                os.path.join(os.path.dirname(__file__), name))
+            if parent:
+                directory = os.path.abspath(
+                    os.path.join(os.path.dirname(__file__), os.pardir, name))
+            else:
+                directory = os.path.abspath(
+                    os.path.join(os.path.dirname(__file__), name))
     if not os.path.exists(directory):
         os.makedirs(directory)
     return directory
+
+
+def remove_files(file_names):
+    import os
+    for fn in file_names:
+        if os.path.exists(fn):
+            os.remove(fn)
 
 
 def generate_hero_json():

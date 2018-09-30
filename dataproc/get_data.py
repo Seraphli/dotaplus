@@ -1,4 +1,4 @@
-from util import get_path
+from util.util import get_path
 import os
 import json
 import codecs
@@ -36,7 +36,7 @@ def crawl(spiders):
     process = CrawlerProcess(settings)
     for spider in spiders:
         process.crawl(spider)
-    process.start()
+    process.start(stop_after_crawl=False)
     return load_json(spider_names, file_names)
 
 
@@ -65,11 +65,17 @@ def process_data(raw_data):
     for nd in raw_data['cn_name_dict']:
         data[nd['hero_name']]['cn_name'] = nd['hero_real_name']
     for wr in raw_data['win_rate']:
-        data[wr['hero_name']]['win_rate'] = wr['win_rate']
+        cfg = list(wr.keys())
+        cfg.remove('hero_name')
+        data[wr['hero_name']][cfg[0]] = wr[cfg[0]]
     for mu in raw_data['match_ups']:
-        data[mu['hero_name']]['match_ups'] = mu['match_ups']
+        cfg = list(mu.keys())
+        cfg.remove('hero_name')
+        data[mu['hero_name']][cfg[0]] = mu[cfg[0]]
     for tm in raw_data['teammates']:
-        data[tm['hero_name']]['teammates'] = tm['teammates']
+        cfg = list(tm.keys())
+        cfg.remove('hero_name')
+        data[tm['hero_name']][cfg[0]] = tm[cfg[0]]
     for counter in raw_data['counters']:
         h = name_dict[counter['hero_name']]
         _counter = {}
@@ -80,22 +86,28 @@ def process_data(raw_data):
             _counter[k] = _heroes
         data[h]['counters'] = _counter
     for h in data:
-        data[h]['c_match_ups'] = copy.deepcopy(data[h]['match_ups'])
-        for mu in data[h]['c_match_ups']:
-            if mu in data[h]['counters']['good_against']:
-                data[h]['c_match_ups'][mu] += 5.0
-                data[h]['c_match_ups'][mu] = round(
-                    data[h]['c_match_ups'][mu], 2)
-            if mu in data[h]['counters']['bad_against']:
-                data[h]['c_match_ups'][mu] -= 5.0
-                data[h]['c_match_ups'][mu] = round(
-                    data[h]['c_match_ups'][mu], 2)
-        data[h]['c_teammates'] = copy.deepcopy(data[h]['teammates'])
-        for tm in data[h]['c_teammates']:
-            if tm in data[h]['counters']['work_well']:
-                data[h]['c_teammates'][tm] += 5.0
-                data[h]['c_teammates'][tm] = round(
-                    data[h]['c_teammates'][tm], 2)
+        for key in list(data[h].keys()):
+            if 'match_ups' in key:
+                c_key = 'c_' + key
+                data[h][c_key] = copy.deepcopy(data[h][key])
+                for mu in data[h][c_key]:
+                    if mu in data[h]['counters']['good_against']:
+                        data[h][c_key][mu] += 5.0
+                        data[h][c_key][mu] = round(
+                            data[h][c_key][mu], 2)
+                    if mu in data[h]['counters']['bad_against']:
+                        data[h][c_key][mu] -= 5.0
+                        data[h][c_key][mu] = round(
+                            data[h][c_key][mu], 2)
+        for key in list(data[h].keys()):
+            if 'match_ups' in key:
+                c_key = 'c_' + key
+                data[h][c_key] = copy.deepcopy(data[h][key])
+                for tm in data[h][c_key]:
+                    if tm in data[h]['counters']['work_well']:
+                        data[h][c_key][tm] += 5.0
+                        data[h][c_key][tm] = round(
+                            data[h][c_key][tm], 2)
     with open('data.json', 'w') as f:
         json.dump(data, f)
 

@@ -1,11 +1,12 @@
 import tornado.ioloop
 import tornado.web
-from ban_pick import BanPick
-from output import CNOutput
-import get_data
-import multiprocessing as mp
+import tornado.autoreload
+from dataproc.ban_pick import BanPick
+from dataproc.output import CNOutput
+from dataproc import get_data
 import time
 import json
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 class BPHandler(tornado.web.RequestHandler):
@@ -39,8 +40,6 @@ def update_data():
     print('Update data')
     get_data.main()
     print('Update complete')
-    time.sleep(43200)
-    mp.Process(target=update_data).start()
 
 
 def make_app():
@@ -50,9 +49,13 @@ def make_app():
 
 
 if __name__ == "__main__":
-    mp.Process(target=update_data).start()
-    time.sleep(20)
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(update_data, 'interval', minutes=1)
+    scheduler.start()
+    time.sleep(40)
     print('Server start')
     app = make_app()
     app.listen(30207)
+    tornado.autoreload.start()
+    tornado.autoreload.watch('myfile')
     tornado.ioloop.IOLoop.current().start()

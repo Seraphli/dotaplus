@@ -1,7 +1,7 @@
 import time
-from cfg import MainHeroInterface
-from hero_index import HERO_INDEX
-from get_data import insert_role_into_data
+from data.cfg import MainHeroInterface
+from data.hero_index import HERO_INDEX
+from dataproc.get_data import insert_role_into_data
 import json
 
 
