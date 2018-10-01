@@ -1,9 +1,44 @@
 import random
 from math import sqrt, log
-from dataproc.ban_pick import BanPickGame, BanPick
+from dataproc.ban_pick import BanPick
 from cv.img_proc import HeroMatchCV
 from tqdm import trange
 import sys
+import copy
+
+
+class BanPickGame(object):
+    def __init__(self, ban_pick, available, teams, team_no):
+        self.bp = ban_pick
+        self.available = available
+        # remove none before initialize
+        self.teams = self.bp.remove_none(*teams)
+        self.team_no = team_no
+
+    def get_moves(self):
+        if len(self.teams[0]) == 5 and len(self.teams[1]) == 5:
+            return []
+        return copy.deepcopy(self.available)
+
+    def do_move(self, move):
+        self.available.remove(move)
+        if len(self.teams[0]) < 5:
+            self.teams[0].append(move)
+        elif len(self.teams[1]) < 5:
+            self.teams[1].append(move)
+
+    def clone(self):
+        return BanPickGame(self.bp, copy.deepcopy(self.available),
+                           copy.deepcopy(self.teams), self.team_no)
+
+    def is_game_over(self):
+        return sum([len(t) for t in self.teams if t != 'none']) == 10
+
+    def get_result(self):
+        teammates = self.teams[self.team_no]
+        match_ups = self.teams[1 - self.team_no]
+        _, _, wr, _ = self.bp.win_rate(match_ups, teammates)
+        return wr
 
 
 class Node(object):

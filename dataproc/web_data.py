@@ -34,20 +34,17 @@ class WebData(object):
 
     def _crawl(self):
         from scrapy.utils.project import get_project_settings
-        from twisted.internet import reactor
-        from scrapy.crawler import CrawlerRunner
+        from scrapy.crawler import CrawlerProcess
         from scrapy.utils.log import configure_logging
         from util.util import remove_files
         remove_files(self.file_names)
         settings = get_project_settings()
         settings.set('LOG_ENABLED', False)
         configure_logging(settings)
-        runner = CrawlerRunner()
+        process = CrawlerProcess(settings)
         for spider in self.spiders:
-            runner.crawl(spider)
-        d = runner.join()
-        d.addBoth(lambda _: reactor.stop())
-        reactor.run()
+            process.crawl(spider)
+        process.start()
         print('Data collect complete.')
 
     def load_json(self):
@@ -125,7 +122,7 @@ class WebData(object):
 
     def insert_role_into_data(self):
         from util.util import get_path
-        with open(get_path('data') + '/role.json', 'r') as f:
+        with open(get_path('data', parent=True) + '/role.json', 'r') as f:
             roles = json.load(f)
         for k in self.data.keys():
             self.data[k]['role'] = roles[k]
@@ -133,10 +130,13 @@ class WebData(object):
     def save_data(self):
         from util.util import get_path
         import shutil
+        import codecs
 
-        with open(get_path('data') + '/data.json', 'w') as f:
+        with codecs.open(get_path('data', parent=True)
+                         + '/data.json', 'w', encoding='utf8') as f:
             json.dump(self.data, f)
-        shutil.copy(get_path('data') + '/data.json', get_path('server_data'))
+        shutil.copy(get_path('data', parent=True) + '/data.json',
+                    get_path('server_data', parent=True))
 
 
 if __name__ == '__main__':

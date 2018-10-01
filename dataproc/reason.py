@@ -41,31 +41,3 @@ CN_REASON_DICT = {
     Reasons.N_MATCH_UPS: '被克制',
     Reasons.N_TEAMMATES: '不配合',
 }
-
-
-def get_good_reason_cn(hero, reasons, data):
-    _reason = []
-    for r in CN_REASON_DICT:
-        if '-' not in r and hero in reasons[r]:
-            if r == Reasons.MATCH_UPS or r == Reasons.TEAMMATES:
-                _reason.append(CN_REASON_DICT[r] + ':' +
-                               ','.join([data[h]['cn_name']
-                                         for h in reasons[r][hero]]))
-            elif CN_REASON_DICT[r] not in _reason:
-                _reason.append(CN_REASON_DICT[r])
-
-    return ';'.join(_reason)
-
-
-def get_bad_reason_cn(hero, reasons, data):
-    _reason = []
-    for r in CN_REASON_DICT:
-        if '-' in r and hero in reasons[r]:
-            if r == Reasons.N_MATCH_UPS or r == Reasons.N_TEAMMATES:
-                _reason.append(CN_REASON_DICT[r] + ':' +
-                               ','.join([data[h]['cn_name']
-                                         for h in reasons[r][hero]]))
-            elif CN_REASON_DICT[r] not in _reason:
-                _reason.append(CN_REASON_DICT[r])
-
-    return ';'.join(_reason)

@@ -1,45 +1,49 @@
 import tornado.ioloop
 import tornado.web
-import tornado.autoreload
-from dataproc.ban_pick import BanPick
-from dataproc.output import CNOutput
-from dataproc import get_data
+import tornado.options
 import time
 import json
-from apscheduler.schedulers.background import BackgroundScheduler
+from dataproc.core import Core
+from util.util import get_path
+
+core = Core()
+core.load_data(get_path('server_data', parent=True)
+               + '/data.json')
+last_time = time.time()
 
 
 class BPHandler(tornado.web.RequestHandler):
     def initialize(self):
-        self.bp = BanPick()
-        self.o = CNOutput()
-        self.last_time = time.time()
+        pass
+
+    def load_data(self):
+        global core, last_time
+        core.load_data(get_path('server_data', parent=True)
+                       + '/data.json')
+        last_time = time.time()
+
+    def check_update(self):
+        global last_time
+        if time.time() - last_time > 43200:
+            print('{}, Reload data'.format(time.time()))
+            self.load_data()
 
     def post(self):
-        if time.time() - self.last_time > 43200:
-            self.bp = BanPick()
-            self.last_time = time.time()
-
+        global core
+        self.check_update()
         team_no = json.loads(self.get_argument('team_no'))
         teams = json.loads(self.get_argument('teams'))
         available = json.loads(self.get_argument('available'))
+        cfg = json.loads(self.get_argument('cfg'))
         teammates = teams[team_no]
         match_ups = teams[1 - team_no]
-        match_ups, teammates = self.bp.remove_none(match_ups, teammates)
-        r = self.bp.recommend_dict(match_ups, teammates, available)
-        if r is not None:
-            r['output'] = self.o.recommend_str(match_ups, teammates, available)
-            self.write(json.dumps(r))
-        r = self.bp.win_rate_dict(match_ups, teammates)
-        if r is not None:
-            r['output'] = self.o.win_rate_str(match_ups, teammates)
-            self.write(json.dumps(r))
-
-
-def update_data():
-    print('Update data')
-    get_data.main()
-    print('Update complete')
+        match_ups, teammates = core.remove_none(match_ups, teammates)
+        r = core.calculate(cfg, match_ups, teammates, available)
+        response = {
+            'table': r['table'],
+            'output': r['output']
+        }
+        self.write(json.dumps(response))
 
 
 def make_app():
@@ -49,13 +53,8 @@ def make_app():
 
 
 if __name__ == "__main__":
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(update_data, 'interval', minutes=1)
-    scheduler.start()
-    time.sleep(40)
-    print('Server start')
+    print('{}, Server start'.format(time.time()))
+    tornado.options.parse_command_line()
     app = make_app()
     app.listen(30207)
-    tornado.autoreload.start()
-    tornado.autoreload.watch('myfile')
     tornado.ioloop.IOLoop.current().start()
