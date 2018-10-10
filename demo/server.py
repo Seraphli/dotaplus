@@ -56,5 +56,5 @@ if __name__ == "__main__":
     print('{}, Server start'.format(time.time()))
     tornado.options.parse_command_line()
     app = make_app()
-    app.listen(30207)
+    app.listen(20207)
     tornado.ioloop.IOLoop.current().start()

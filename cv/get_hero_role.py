@@ -1,8 +1,7 @@
 import time
-from data.cfg import MainHeroInterface
-from data.hero_index import HERO_INDEX
-from dataproc.get_data import insert_role_into_data
+from data import CUSTOM_DATA
 import json
+from util.util import get_path
 
 
 def get_one_hero_role(c, row, col):
@@ -11,50 +10,53 @@ def get_one_hero_role(c, row, col):
     # Click on hero interface
     pyautogui.click(465, 30, button='left')
     pyautogui.click(450, 90, button='left')
-    x, y, w, h = MainHeroInterface.X, MainHeroInterface.Y, \
-                 MainHeroInterface.W, MainHeroInterface.H
-    x += col * MainHeroInterface.D_COL + w / 2
-    y += row * MainHeroInterface.D_ROW + c * MainHeroInterface.D_CLASS + h / 2
+    x, y = CUSTOM_DATA['main_interface_hero']['x, y']
+    w, h = CUSTOM_DATA['main_interface_hero']['w, h']
+    d = CUSTOM_DATA['main_interface_hero']['d_col, d_row, d_class']
+    x += col * d[0] + w / 2
+    y += row * d[1] + c * d[2] + h / 2
     pyautogui.click(x, y, button='left')
     pyautogui.click(1435, 305, button='left')
     pyautogui.screenshot('temp_ss.png')
     img = cv2.imread('temp_ss.png')
     crop_img = img[400:600, 1070:1200]
-    template = cv2.imread('res/role_pos_template.png')
+    template = cv2.imread(get_path('res', parent=True) +
+                          '/role_pos_template.png')
     res = cv2.matchTemplate(crop_img, template, cv2.TM_SQDIFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
     assert (min_val < 0.01)
     loc = (min_loc[0] + 1112, min_loc[1] + 400)
     role = {}
-    for c, col_row in enumerate(MainHeroInterface.I_NUM):
+    w, h = CUSTOM_DATA['role']['w, h']
+    d = CUSTOM_DATA['role']['d_col, d_row, d_class']
+    for c, col_row in enumerate(CUSTOM_DATA['role']['num']):
         cols, rows = col_row
         for row in range(rows):
             attr = 0
             for col in range(cols):
-                x = loc[0] + col * MainHeroInterface.I_D_COL + \
-                    c * MainHeroInterface.I_D_CLASS
-                y = loc[1] + row * MainHeroInterface.I_D_ROW
-                crop_img = img[y:y + MainHeroInterface.I_H,
-                           x:x + MainHeroInterface.I_W]
+                x = loc[0] + col * d[0] + c * d[2]
+                y = loc[1] + row * d[1]
+                crop_img = img[y:y + h, x:x + w]
                 mean = crop_img.mean()
                 if mean > 50:
                     attr += 1
-            role[MainHeroInterface.ROLE_NAME[str((c, row))]] = attr
+            role[CUSTOM_DATA['role']['role_pos'][str((c, row))]] = attr
+    print(role)
     return role
 
 
 def get_hero_role():
     roles = {}
-    for c, rows in enumerate(MainHeroInterface.HERO_NUM):
+    index = 0
+    for c, rows in enumerate(CUSTOM_DATA['main_interface_hero']['num']):
         for row, col_n in enumerate(rows):
             for col in range(col_n):
-                index = row * 22 + col
-                _row = index // 21
-                _col = index % 21
-                hero_name = HERO_INDEX[str((c, _row, _col))]
+                hero_name = CUSTOM_DATA['cn_layout'][index]
+                print(hero_name)
                 role = get_one_hero_role(c, row, col)
                 roles[hero_name] = role
-    with open('role.json', 'w') as f:
+                index += 1
+    with open(get_path('data', parent=True) + '/role.json', 'w') as f:
         json.dump(roles, f)
 
 
@@ -63,7 +65,6 @@ def main():
     pyautogui.PAUSE = 1
     time.sleep(3)
     get_hero_role()
-    insert_role_into_data()
 
 
 if __name__ == '__main__':
