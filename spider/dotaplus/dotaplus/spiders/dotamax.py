@@ -9,7 +9,6 @@ class NameDictSpider(scrapy.Spider):
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
-        'LOG_ENABLED': False,
         'FEED_FORMAT': 'json',
         'FEED_URI': 'name_dict_raw.json'
     }
@@ -37,7 +36,6 @@ class CNNameDictSpider(scrapy.Spider):
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
-        'LOG_ENABLED': False,
         'FEED_FORMAT': 'json',
         'FEED_URI': 'cn_name_dict_raw.json',
         'DEFAULT_REQUEST_HEADERS': {
@@ -69,7 +67,6 @@ class WinRateSpider(scrapy.Spider):
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
-        'LOG_ENABLED': False,
         'FEED_FORMAT': 'json',
         'FEED_URI': 'win_rate_raw.json'
     }
@@ -130,7 +127,6 @@ class MatchUpsSpider(scrapy.Spider):
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
-        'LOG_ENABLED': False,
         'FEED_FORMAT': 'json',
         'FEED_URI': 'match_ups_raw.json'
     }
@@ -187,7 +183,6 @@ class TeammatesSpider(scrapy.Spider):
     allowed_domains = ['www.dotamax.com']
     start_urls = ['http://www.dotamax.com/hero/rate/']
     custom_settings = {
-        'LOG_ENABLED': False,
         'FEED_FORMAT': 'json',
         'FEED_URI': 'teammates_raw.json'
     }
