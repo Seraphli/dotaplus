@@ -1,4 +1,4 @@
-from util.util import get_path
+from dpapi.util.util import get_path
 import os
 import json
 import codecs

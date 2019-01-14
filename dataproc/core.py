@@ -387,7 +387,7 @@ class Core(object):
 
 
 if __name__ == '__main__':
-    from util.util import get_path
+    from dpapi.util.util import get_path
     from data import CUSTOM_DATA
 
     core = Core()

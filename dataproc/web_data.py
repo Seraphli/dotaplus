@@ -8,7 +8,7 @@ class WebData(object):
         from spider.dotaplus.dotaplus.spiders.dotamax import NameDictSpider, \
             CNNameDictSpider, WinRateSpider, MatchUpsSpider, TeammatesSpider
         from spider.dotaplus.dotaplus.spiders.dotawiki import CountersSpider
-        from util.util import get_path
+        from dpapi.util.util import get_path
         self.spiders = [NameDictSpider, CNNameDictSpider, WinRateSpider,
                         MatchUpsSpider, TeammatesSpider, CountersSpider]
 
@@ -36,7 +36,7 @@ class WebData(object):
         from scrapy.utils.project import get_project_settings
         from scrapy.crawler import CrawlerProcess
         from scrapy.utils.log import configure_logging
-        from util.util import remove_files
+        from dpapi.util import remove_files
         remove_files(self.file_names)
         settings = get_project_settings()
         settings.set('LOG_ENABLED', False)
@@ -121,14 +121,14 @@ class WebData(object):
                                 self.data[h][c_key][tm], 2)
 
     def insert_role_into_data(self):
-        from util.util import get_path
+        from dpapi.util.util import get_path
         with open(get_path('data', parent=True) + '/role.json', 'r') as f:
             roles = json.load(f)
         for k in self.data.keys():
             self.data[k]['role'] = roles[k]
 
     def save_data(self):
-        from util.util import get_path
+        from dpapi.util.util import get_path
         import shutil
         import codecs
 

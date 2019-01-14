@@ -1,14 +1,15 @@
 def crawl_web_data(debug=False):
-    from spider.dotaplus.dotaplus.spiders.dotamax import NameDictSpider, \
+    from dpapi.spider.dotaplus.dotaplus.spiders.dotamax import NameDictSpider, \
         CNNameDictSpider, WinRateSpider, MatchUpsSpider, TeammatesSpider
-    from spider.dotaplus.dotaplus.spiders.dotawiki import CountersSpider
+    from dpapi.spider.dotaplus.dotaplus.spiders.dotawiki import CountersSpider
     from scrapy.crawler import CrawlerProcess
     from scrapy.utils.project import get_project_settings
     import os
     import json
     import pickle
     import copy
-    from util.util import get_path
+    from dpapi.util.util import get_path
+    from multiprocessing import Process, Queue
 
     def load_json(_spider_names, _file_names):
         _raw_data = {}
@@ -31,14 +32,34 @@ def crawl_web_data(debug=False):
         return _spider_names, _file_names
 
     def crawl(_spiders, _file_names):
+        def _crawl(_spider):
+            def f(_q):
+                try:
+                    _p = CrawlerProcess(settings)
+                    _p.crawl(_spider)
+                    _p.start(stop_after_crawl=True)
+                    _q.put(None)
+                except Exception as e:
+                    _q.put(e)
+
+            q = Queue()
+            p = Process(target=f, args=(q,))
+            p.start()
+            result = q.get()
+            p.join()
+            if result is not None:
+                raise result
+
         remove_json(_file_names)
         settings = get_project_settings()
         settings.set('LOG_ENABLED', debug)
         settings.set('RETRY_TIMES', 10)
-        process = CrawlerProcess(settings)
+        settings.set('HTTPCACHE_ENABLED', True)
+        settings.set('HTTPCACHE_EXPIRATION_SECS', 300)
         for spider in _spiders:
-            process.crawl(spider)
-        process.start(stop_after_crawl=True)
+            _crawl(spider)
+            print('.', end='')
+        print()
         return
 
     def process_data(_raw_data):

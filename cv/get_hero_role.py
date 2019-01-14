@@ -1,7 +1,7 @@
 import time
 from data import CUSTOM_DATA
 import json
-from util.util import get_path
+from dpapi.util.util import get_path
 
 
 def get_one_hero_role(c, row, col):

@@ -1,6 +1,6 @@
 import codecs
 import json
-from util.util import get_path
+from dpapi.util.util import get_path
 
 with codecs.open(get_path('data', parent=True) + '/custom_data.json',
                  encoding='utf8') as f:

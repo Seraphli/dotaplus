@@ -25,7 +25,7 @@ class DataGen(object):
 
     @staticmethod
     def gen_complete_custom_data():
-        from util.util import get_path
+        from dpapi.util.util import get_path
         c_data = copy.deepcopy(CUSTOM_DATA)
         with codecs.open(get_path('data', parent=True) +
                          '/data.json', encoding='utf8') as f:

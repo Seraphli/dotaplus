@@ -2,7 +2,7 @@ import codecs
 from data.cfg import Interface
 from urllib.request import urlretrieve
 import json
-from util import get_path
+from dpapi.util.util import get_path
 
 with codecs.open('custom_data.json', encoding='utf8') as f:
     custom_data = json.load(f)

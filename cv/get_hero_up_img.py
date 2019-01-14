@@ -1,7 +1,7 @@
 import pyautogui
 import time
 from data.cfg import Interface, HeroImage
-from util import get_path
+from dpapi.util.util import get_path
 from data.hero_index import HERO_INDEX
 import cv2
 

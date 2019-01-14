@@ -1,5 +1,5 @@
 import cv2
-from util import get_path
+from dpapi.util.util import get_path
 from PIL import ImageGrab
 from data.cfg import Interface, HeroImage
 from data.hero_index import HERO_INDEX

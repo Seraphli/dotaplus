@@ -4,7 +4,7 @@ import tornado.options
 import time
 import json
 from dataproc.core import Core
-from util.util import get_path
+from dpapi.util.util import get_path
 
 core = Core()
 core.load_data(get_path('server_data', parent=True)
