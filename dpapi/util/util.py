@@ -42,17 +42,11 @@ def remove_files(file_names):
             os.remove(fn)
 
 
-def generate_hero_json():
-    import json
-
-    with open('data.json') as f:
-        data = json.load(f)
-    print(data.keys())
+from chardet import detect
 
 
-def main():
-    generate_hero_json()
-
-
-if __name__ == '__main__':
-    main()
+def get_encoding_type(file):
+    """Get file encoding type."""
+    with open(file, 'rb') as f:
+        raw_data = f.read()
+    return detect(raw_data)['encoding']

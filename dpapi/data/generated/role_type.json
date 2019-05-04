@@ -1,0 +1,11 @@
+{
+  "DOTA_HeroRole_Carry": "Carry",
+  "DOTA_HeroRole_Support": "Support",
+  "DOTA_HeroRole_Nuker": "Nuker",
+  "DOTA_HeroRole_Disabler": "Disabler",
+  "DOTA_HeroRole_Jungler": "Jungler",
+  "DOTA_HeroRole_Durable": "Durable",
+  "DOTA_HeroRole_Escape": "Escape",
+  "DOTA_HeroRole_Pusher": "Pusher",
+  "DOTA_HeroRole_Initiator": "Initiator"
+}

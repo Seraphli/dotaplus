@@ -1,0 +1,587 @@
+{
+  "queenofpain": {
+    "english": "Queen of Pain",
+    "raw_hero_name": "npc_dota_hero_queenofpain",
+    "schinese": "\u75db\u82e6\u5973\u738b"
+  },
+  "antimage": {
+    "english": "Anti-Mage",
+    "raw_hero_name": "npc_dota_hero_antimage",
+    "schinese": "\u654c\u6cd5\u5e08"
+  },
+  "kunkka": {
+    "english": "Kunkka",
+    "raw_hero_name": "npc_dota_hero_kunkka",
+    "schinese": "\u6606\u5361"
+  },
+  "lina": {
+    "english": "Lina",
+    "raw_hero_name": "npc_dota_hero_lina",
+    "schinese": "\u8389\u5a1c"
+  },
+  "mirana": {
+    "english": "Mirana",
+    "raw_hero_name": "npc_dota_hero_mirana",
+    "schinese": "\u7c73\u62c9\u5a1c"
+  },
+  "slardar": {
+    "english": "Slardar",
+    "raw_hero_name": "npc_dota_hero_slardar",
+    "schinese": "\u65af\u62c9\u8fbe"
+  },
+  "lion": {
+    "english": "Lion",
+    "raw_hero_name": "npc_dota_hero_lion",
+    "schinese": "\u83b1\u6069"
+  },
+  "phantom_assassin": {
+    "english": "Phantom Assassin",
+    "raw_hero_name": "npc_dota_hero_phantom_assassin",
+    "schinese": "\u5e7b\u5f71\u523a\u5ba2"
+  },
+  "tidehunter": {
+    "english": "Tidehunter",
+    "raw_hero_name": "npc_dota_hero_tidehunter",
+    "schinese": "\u6f6e\u6c50\u730e\u4eba"
+  },
+  "witch_doctor": {
+    "english": "Witch Doctor",
+    "raw_hero_name": "npc_dota_hero_witch_doctor",
+    "schinese": "\u5deb\u533b"
+  },
+  "vengefulspirit": {
+    "english": "Vengeful Spirit",
+    "raw_hero_name": "npc_dota_hero_vengefulspirit",
+    "schinese": "\u590d\u4ec7\u4e4b\u9b42"
+  },
+  "juggernaut": {
+    "english": "Juggernaut",
+    "raw_hero_name": "npc_dota_hero_juggernaut",
+    "schinese": "\u4e3b\u5bb0"
+  },
+  "earthshaker": {
+    "english": "Earthshaker",
+    "raw_hero_name": "npc_dota_hero_earthshaker",
+    "schinese": "\u64bc\u5730\u8005"
+  },
+  "pudge": {
+    "english": "Pudge",
+    "raw_hero_name": "npc_dota_hero_pudge",
+    "schinese": "\u5e15\u5409"
+  },
+  "bane": {
+    "english": "Bane",
+    "raw_hero_name": "npc_dota_hero_bane",
+    "schinese": "\u7978\u4e71\u4e4b\u6e90"
+  },
+  "crystal_maiden": {
+    "english": "Crystal Maiden",
+    "raw_hero_name": "npc_dota_hero_crystal_maiden",
+    "schinese": "\u6c34\u6676\u5ba4\u5973"
+  },
+  "sven": {
+    "english": "Sven",
+    "raw_hero_name": "npc_dota_hero_sven",
+    "schinese": "\u65af\u6e29"
+  },
+  "skeleton_king": {
+    "english": "Wraith King",
+    "raw_hero_name": "npc_dota_hero_skeleton_king",
+    "schinese": "\u51a5\u9b42\u5927\u5e1d"
+  },
+  "storm_spirit": {
+    "english": "Storm Spirit",
+    "raw_hero_name": "npc_dota_hero_storm_spirit",
+    "schinese": "\u98ce\u66b4\u4e4b\u7075"
+  },
+  "sand_king": {
+    "english": "Sand King",
+    "raw_hero_name": "npc_dota_hero_sand_king",
+    "schinese": "\u6c99\u738b"
+  },
+  "nevermore": {
+    "english": "Shadow Fiend",
+    "raw_hero_name": "npc_dota_hero_nevermore",
+    "schinese": "\u5f71\u9b54"
+  },
+  "drow_ranger": {
+    "english": "Drow Ranger",
+    "raw_hero_name": "npc_dota_hero_drow_ranger",
+    "schinese": "\u5353\u5c14\u6e38\u4fa0"
+  },
+  "axe": {
+    "english": "Axe",
+    "raw_hero_name": "npc_dota_hero_axe",
+    "schinese": "\u65a7\u738b"
+  },
+  "bloodseeker": {
+    "english": "Bloodseeker",
+    "raw_hero_name": "npc_dota_hero_bloodseeker",
+    "schinese": "\u8840\u9b54"
+  },
+  "phantom_lancer": {
+    "english": "Phantom Lancer",
+    "raw_hero_name": "npc_dota_hero_phantom_lancer",
+    "schinese": "\u5e7b\u5f71\u957f\u77db\u624b"
+  },
+  "razor": {
+    "english": "Razor",
+    "raw_hero_name": "npc_dota_hero_razor",
+    "schinese": "\u5243\u5200"
+  },
+  "morphling": {
+    "english": "Morphling",
+    "raw_hero_name": "npc_dota_hero_morphling",
+    "schinese": "\u53d8\u4f53\u7cbe\u7075"
+  },
+  "zuus": {
+    "english": "Zeus",
+    "raw_hero_name": "npc_dota_hero_zuus",
+    "schinese": "\u5b99\u65af"
+  },
+  "tiny": {
+    "english": "Tiny",
+    "raw_hero_name": "npc_dota_hero_tiny",
+    "schinese": "\u5c0f\u5c0f"
+  },
+  "puck": {
+    "english": "Puck",
+    "raw_hero_name": "npc_dota_hero_puck",
+    "schinese": "\u5e15\u514b"
+  },
+  "windrunner": {
+    "english": "Windranger",
+    "raw_hero_name": "npc_dota_hero_windrunner",
+    "schinese": "\u98ce\u884c\u8005"
+  },
+  "lich": {
+    "english": "Lich",
+    "raw_hero_name": "npc_dota_hero_lich",
+    "schinese": "\u5deb\u5996"
+  },
+  "shadow_shaman": {
+    "english": "Shadow Shaman",
+    "raw_hero_name": "npc_dota_hero_shadow_shaman",
+    "schinese": "\u6697\u5f71\u8428\u6ee1"
+  },
+  "riki": {
+    "english": "Riki",
+    "raw_hero_name": "npc_dota_hero_riki",
+    "schinese": "\u529b\u4e38"
+  },
+  "enigma": {
+    "english": "Enigma",
+    "raw_hero_name": "npc_dota_hero_enigma",
+    "schinese": "\u8c1c\u56e2"
+  },
+  "tinker": {
+    "english": "Tinker",
+    "raw_hero_name": "npc_dota_hero_tinker",
+    "schinese": "\u4fee\u8865\u5320"
+  },
+  "sniper": {
+    "english": "Sniper",
+    "raw_hero_name": "npc_dota_hero_sniper",
+    "schinese": "\u72d9\u51fb\u624b"
+  },
+  "necrolyte": {
+    "english": "Necrophos",
+    "raw_hero_name": "npc_dota_hero_necrolyte",
+    "schinese": "\u761f\u75ab\u6cd5\u5e08"
+  },
+  "warlock": {
+    "english": "Warlock",
+    "raw_hero_name": "npc_dota_hero_warlock",
+    "schinese": "\u672f\u58eb"
+  },
+  "beastmaster": {
+    "english": "Beastmaster",
+    "raw_hero_name": "npc_dota_hero_beastmaster",
+    "schinese": "\u517d\u738b"
+  },
+  "venomancer": {
+    "english": "Venomancer",
+    "raw_hero_name": "npc_dota_hero_venomancer",
+    "schinese": "\u5267\u6bd2\u672f\u58eb"
+  },
+  "faceless_void": {
+    "english": "Faceless Void",
+    "raw_hero_name": "npc_dota_hero_faceless_void",
+    "schinese": "\u865a\u7a7a\u5047\u9762"
+  },
+  "death_prophet": {
+    "english": "Death Prophet",
+    "raw_hero_name": "npc_dota_hero_death_prophet",
+    "schinese": "\u6b7b\u4ea1\u5148\u77e5"
+  },
+  "pugna": {
+    "english": "Pugna",
+    "raw_hero_name": "npc_dota_hero_pugna",
+    "schinese": "\u5e15\u683c\u7eb3"
+  },
+  "templar_assassin": {
+    "english": "Templar Assassin",
+    "raw_hero_name": "npc_dota_hero_templar_assassin",
+    "schinese": "\u5723\u5802\u523a\u5ba2"
+  },
+  "viper": {
+    "english": "Viper",
+    "raw_hero_name": "npc_dota_hero_viper",
+    "schinese": "\u51a5\u754c\u4e9a\u9f99"
+  },
+  "luna": {
+    "english": "Luna",
+    "raw_hero_name": "npc_dota_hero_luna",
+    "schinese": "\u9732\u5a1c"
+  },
+  "dragon_knight": {
+    "english": "Dragon Knight",
+    "raw_hero_name": "npc_dota_hero_dragon_knight",
+    "schinese": "\u9f99\u9a91\u58eb"
+  },
+  "dazzle": {
+    "english": "Dazzle",
+    "raw_hero_name": "npc_dota_hero_dazzle",
+    "schinese": "\u6234\u6cfd"
+  },
+  "rattletrap": {
+    "english": "Clockwerk",
+    "raw_hero_name": "npc_dota_hero_rattletrap",
+    "schinese": "\u53d1\u6761\u6280\u5e08"
+  },
+  "leshrac": {
+    "english": "Leshrac",
+    "raw_hero_name": "npc_dota_hero_leshrac",
+    "schinese": "\u62c9\u5e2d\u514b"
+  },
+  "furion": {
+    "english": "Nature's Prophet",
+    "raw_hero_name": "npc_dota_hero_furion",
+    "schinese": "\u5148\u77e5"
+  },
+  "life_stealer": {
+    "english": "Lifestealer",
+    "raw_hero_name": "npc_dota_hero_life_stealer",
+    "schinese": "\u566c\u9b42\u9b3c"
+  },
+  "dark_seer": {
+    "english": "Dark Seer",
+    "raw_hero_name": "npc_dota_hero_dark_seer",
+    "schinese": "\u9ed1\u6697\u8d24\u8005"
+  },
+  "clinkz": {
+    "english": "Clinkz",
+    "raw_hero_name": "npc_dota_hero_clinkz",
+    "schinese": "\u514b\u6797\u514b\u5179"
+  },
+  "omniknight": {
+    "english": "Omniknight",
+    "raw_hero_name": "npc_dota_hero_omniknight",
+    "schinese": "\u5168\u80fd\u9a91\u58eb"
+  },
+  "enchantress": {
+    "english": "Enchantress",
+    "raw_hero_name": "npc_dota_hero_enchantress",
+    "schinese": "\u9b45\u60d1\u9b54\u5973"
+  },
+  "huskar": {
+    "english": "Huskar",
+    "raw_hero_name": "npc_dota_hero_huskar",
+    "schinese": "\u54c8\u65af\u5361"
+  },
+  "night_stalker": {
+    "english": "Night Stalker",
+    "raw_hero_name": "npc_dota_hero_night_stalker",
+    "schinese": "\u6697\u591c\u9b54\u738b"
+  },
+  "broodmother": {
+    "english": "Broodmother",
+    "raw_hero_name": "npc_dota_hero_broodmother",
+    "schinese": "\u80b2\u6bcd\u8718\u86db"
+  },
+  "bounty_hunter": {
+    "english": "Bounty Hunter",
+    "raw_hero_name": "npc_dota_hero_bounty_hunter",
+    "schinese": "\u8d4f\u91d1\u730e\u4eba"
+  },
+  "weaver": {
+    "english": "Weaver",
+    "raw_hero_name": "npc_dota_hero_weaver",
+    "schinese": "\u7f16\u7ec7\u8005"
+  },
+  "jakiro": {
+    "english": "Jakiro",
+    "raw_hero_name": "npc_dota_hero_jakiro",
+    "schinese": "\u6770\u5947\u6d1b"
+  },
+  "batrider": {
+    "english": "Batrider",
+    "raw_hero_name": "npc_dota_hero_batrider",
+    "schinese": "\u8759\u8760\u9a91\u58eb"
+  },
+  "chen": {
+    "english": "Chen",
+    "raw_hero_name": "npc_dota_hero_chen",
+    "schinese": "\u9648"
+  },
+  "spectre": {
+    "english": "Spectre",
+    "raw_hero_name": "npc_dota_hero_spectre",
+    "schinese": "\u5e7d\u9b3c"
+  },
+  "doom_bringer": {
+    "english": "Doom",
+    "raw_hero_name": "npc_dota_hero_doom_bringer",
+    "schinese": "\u672b\u65e5\u4f7f\u8005"
+  },
+  "ancient_apparition": {
+    "english": "Ancient Apparition",
+    "raw_hero_name": "npc_dota_hero_ancient_apparition",
+    "schinese": "\u8fdc\u53e4\u51b0\u9b44"
+  },
+  "ursa": {
+    "english": "Ursa",
+    "raw_hero_name": "npc_dota_hero_ursa",
+    "schinese": "\u718a\u6218\u58eb"
+  },
+  "spirit_breaker": {
+    "english": "Spirit Breaker",
+    "raw_hero_name": "npc_dota_hero_spirit_breaker",
+    "schinese": "\u88c2\u9b42\u4eba"
+  },
+  "gyrocopter": {
+    "english": "Gyrocopter",
+    "raw_hero_name": "npc_dota_hero_gyrocopter",
+    "schinese": "\u77ee\u4eba\u76f4\u5347\u673a"
+  },
+  "alchemist": {
+    "english": "Alchemist",
+    "raw_hero_name": "npc_dota_hero_alchemist",
+    "schinese": "\u70bc\u91d1\u672f\u58eb"
+  },
+  "invoker": {
+    "english": "Invoker",
+    "raw_hero_name": "npc_dota_hero_invoker",
+    "schinese": "\u7948\u6c42\u8005"
+  },
+  "silencer": {
+    "english": "Silencer",
+    "raw_hero_name": "npc_dota_hero_silencer",
+    "schinese": "\u6c89\u9ed8\u672f\u58eb"
+  },
+  "obsidian_destroyer": {
+    "english": "Outworld Devourer",
+    "raw_hero_name": "npc_dota_hero_obsidian_destroyer",
+    "schinese": "\u6b81\u5883\u795e\u8680\u8005"
+  },
+  "lycan": {
+    "english": "Lycan",
+    "raw_hero_name": "npc_dota_hero_lycan",
+    "schinese": "\u72fc\u4eba"
+  },
+  "brewmaster": {
+    "english": "Brewmaster",
+    "raw_hero_name": "npc_dota_hero_brewmaster",
+    "schinese": "\u9152\u4ed9"
+  },
+  "shadow_demon": {
+    "english": "Shadow Demon",
+    "raw_hero_name": "npc_dota_hero_shadow_demon",
+    "schinese": "\u6697\u5f71\u6076\u9b54"
+  },
+  "lone_druid": {
+    "english": "Lone Druid",
+    "raw_hero_name": "npc_dota_hero_lone_druid",
+    "schinese": "\u5fb7\u9c81\u4f0a"
+  },
+  "chaos_knight": {
+    "english": "Chaos Knight",
+    "raw_hero_name": "npc_dota_hero_chaos_knight",
+    "schinese": "\u6df7\u6c8c\u9a91\u58eb"
+  },
+  "treant": {
+    "english": "Treant Protector",
+    "raw_hero_name": "npc_dota_hero_treant",
+    "schinese": "\u6811\u7cbe\u536b\u58eb"
+  },
+  "meepo": {
+    "english": "Meepo",
+    "raw_hero_name": "npc_dota_hero_meepo",
+    "schinese": "\u7c73\u6ce2"
+  },
+  "ogre_magi": {
+    "english": "Ogre Magi",
+    "raw_hero_name": "npc_dota_hero_ogre_magi",
+    "schinese": "\u98df\u4eba\u9b54\u9b54\u6cd5\u5e08"
+  },
+  "undying": {
+    "english": "Undying",
+    "raw_hero_name": "npc_dota_hero_undying",
+    "schinese": "\u4e0d\u673d\u5c38\u738b"
+  },
+  "rubick": {
+    "english": "Rubick",
+    "raw_hero_name": "npc_dota_hero_rubick",
+    "schinese": "\u62c9\u6bd4\u514b"
+  },
+  "disruptor": {
+    "english": "Disruptor",
+    "raw_hero_name": "npc_dota_hero_disruptor",
+    "schinese": "\u5e72\u6270\u8005"
+  },
+  "nyx_assassin": {
+    "english": "Nyx Assassin",
+    "raw_hero_name": "npc_dota_hero_nyx_assassin",
+    "schinese": "\u53f8\u591c\u523a\u5ba2"
+  },
+  "naga_siren": {
+    "english": "Naga Siren",
+    "raw_hero_name": "npc_dota_hero_naga_siren",
+    "schinese": "\u5a1c\u8fe6\u6d77\u5996"
+  },
+  "keeper_of_the_light": {
+    "english": "Keeper of the Light",
+    "raw_hero_name": "npc_dota_hero_keeper_of_the_light",
+    "schinese": "\u5149\u4e4b\u5b88\u536b"
+  },
+  "visage": {
+    "english": "Visage",
+    "raw_hero_name": "npc_dota_hero_visage",
+    "schinese": "\u7ef4\u8428\u5409"
+  },
+  "wisp": {
+    "english": "Io",
+    "raw_hero_name": "npc_dota_hero_wisp",
+    "schinese": "\u827e\u6b27"
+  },
+  "slark": {
+    "english": "Slark",
+    "raw_hero_name": "npc_dota_hero_slark",
+    "schinese": "\u65af\u62c9\u514b"
+  },
+  "medusa": {
+    "english": "Medusa",
+    "raw_hero_name": "npc_dota_hero_medusa",
+    "schinese": "\u7f8e\u675c\u838e"
+  },
+  "troll_warlord": {
+    "english": "Troll Warlord",
+    "raw_hero_name": "npc_dota_hero_troll_warlord",
+    "schinese": "\u5de8\u9b54\u6218\u5c06"
+  },
+  "centaur": {
+    "english": "Centaur Warrunner",
+    "raw_hero_name": "npc_dota_hero_centaur",
+    "schinese": "\u534a\u4eba\u9a6c\u6218\u884c\u8005"
+  },
+  "magnataur": {
+    "english": "Magnus",
+    "raw_hero_name": "npc_dota_hero_magnataur",
+    "schinese": "\u9a6c\u683c\u7eb3\u65af"
+  },
+  "shredder": {
+    "english": "Timbersaw",
+    "raw_hero_name": "npc_dota_hero_shredder",
+    "schinese": "\u4f10\u6728\u673a"
+  },
+  "bristleback": {
+    "english": "Bristleback",
+    "raw_hero_name": "npc_dota_hero_bristleback",
+    "schinese": "\u94a2\u80cc\u517d"
+  },
+  "tusk": {
+    "english": "Tusk",
+    "raw_hero_name": "npc_dota_hero_tusk",
+    "schinese": "\u5de8\u7259\u6d77\u6c11"
+  },
+  "skywrath_mage": {
+    "english": "Skywrath Mage",
+    "raw_hero_name": "npc_dota_hero_skywrath_mage",
+    "schinese": "\u5929\u6012\u6cd5\u5e08"
+  },
+  "abaddon": {
+    "english": "Abaddon",
+    "raw_hero_name": "npc_dota_hero_abaddon",
+    "schinese": "\u4e9a\u5df4\u987f"
+  },
+  "elder_titan": {
+    "english": "Elder Titan",
+    "raw_hero_name": "npc_dota_hero_elder_titan",
+    "schinese": "\u4e0a\u53e4\u5de8\u795e"
+  },
+  "legion_commander": {
+    "english": "Legion Commander",
+    "raw_hero_name": "npc_dota_hero_legion_commander",
+    "schinese": "\u519b\u56e2\u6307\u6325\u5b98"
+  },
+  "ember_spirit": {
+    "english": "Ember Spirit",
+    "raw_hero_name": "npc_dota_hero_ember_spirit",
+    "schinese": "\u7070\u70ec\u4e4b\u7075"
+  },
+  "earth_spirit": {
+    "english": "Earth Spirit",
+    "raw_hero_name": "npc_dota_hero_earth_spirit",
+    "schinese": "\u5927\u5730\u4e4b\u7075"
+  },
+  "abyssal_underlord": {
+    "english": "Underlord",
+    "raw_hero_name": "npc_dota_hero_abyssal_underlord",
+    "schinese": "\u5b7d\u4e3b"
+  },
+  "phoenix": {
+    "english": "Phoenix",
+    "raw_hero_name": "npc_dota_hero_phoenix",
+    "schinese": "\u51e4\u51f0"
+  },
+  "terrorblade": {
+    "english": "Terrorblade",
+    "raw_hero_name": "npc_dota_hero_terrorblade",
+    "schinese": "\u6050\u6016\u5229\u5203"
+  },
+  "oracle": {
+    "english": "Oracle",
+    "raw_hero_name": "npc_dota_hero_oracle",
+    "schinese": "\u795e\u8c15\u8005"
+  },
+  "techies": {
+    "english": "Techies",
+    "raw_hero_name": "npc_dota_hero_techies",
+    "schinese": "\u5de5\u7a0b\u5e08"
+  },
+  "winter_wyvern": {
+    "english": "Winter Wyvern",
+    "raw_hero_name": "npc_dota_hero_winter_wyvern",
+    "schinese": "\u5bd2\u51ac\u98de\u9f99"
+  },
+  "arc_warden": {
+    "english": "Arc Warden",
+    "raw_hero_name": "npc_dota_hero_arc_warden",
+    "schinese": "\u5929\u7a79\u5b88\u671b\u8005"
+  },
+  "monkey_king": {
+    "english": "Monkey King",
+    "raw_hero_name": "npc_dota_hero_monkey_king",
+    "schinese": "\u9f50\u5929\u5927\u5723"
+  },
+  "pangolier": {
+    "english": "Pangolier",
+    "raw_hero_name": "npc_dota_hero_pangolier",
+    "schinese": "\u77f3\u9cde\u5251\u58eb"
+  },
+  "dark_willow": {
+    "english": "Dark Willow",
+    "raw_hero_name": "npc_dota_hero_dark_willow",
+    "schinese": "\u90aa\u5f71\u82b3\u7075"
+  },
+  "grimstroke": {
+    "english": "Grimstroke",
+    "raw_hero_name": "npc_dota_hero_grimstroke",
+    "schinese": "\u5929\u6daf\u58a8\u5ba2"
+  },
+  "mars": {
+    "english": "Mars",
+    "raw_hero_name": "npc_dota_hero_mars",
+    "schinese": "\u739b\u5c14\u65af"
+  }
+}

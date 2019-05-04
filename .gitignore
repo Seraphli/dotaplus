@@ -112,9 +112,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-*.json
 screenshot.png
 temp_ss.png
-!data/role.json
-!data/custom_data.json
-!data/complete_custom_data.json
+dpapi/spider/dotaplus/*.json
+dpapi/data/server/*.json

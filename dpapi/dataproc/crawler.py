@@ -5,18 +5,34 @@ from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 import os
 import json
-import pickle
 import copy
 from dpapi.util.util import get_path
 from multiprocessing import Process, Queue
+import codecs
+
+
+def f(_q, _setting, _spider):
+    try:
+        _p = CrawlerProcess(_setting)
+        _p.crawl(_spider)
+        _p.start(stop_after_crawl=True)
+        _q.put(None)
+    except Exception as e:
+        _q.put(e)
 
 
 class Crawler(object):
     def __init__(self, debug=False):
         self.debug = debug
+        nd = get_path('data/generated', parent=True) + '/name_dict.json'
+        with codecs.open(nd) as f:
+            self.name_dict = json.load(f)
+
+        nd = get_path('data/generated', parent=True) + '/hero_info.json'
+        with codecs.open(nd) as f:
+            self.hero_role = json.load(f)
+
         self.spiders = [
-            NameDictSpider,
-            CNNameDictSpider,
             WinRateSpider,
             MatchUpsSpider,
             TeammatesSpider,
@@ -29,10 +45,10 @@ class Crawler(object):
         settings.set('LOG_ENABLED', self.debug)
         settings.set('RETRY_TIMES', 10)
         settings.set('HTTPCACHE_ENABLED', True)
-        settings.set('HTTPCACHE_EXPIRATION_SECS', 300)
+        settings.set('HTTPCACHE_EXPIRATION_SECS', 3600)
         self.settings = settings
         self.spider_project_path = get_path('spider/dotaplus', parent=True)
-        self.data_path = get_path('server_data', parent=True)
+        self.data_path = get_path('data/server', parent=True)
 
     def load_json(self):
         self.raw_data = {}
@@ -54,17 +70,8 @@ class Crawler(object):
 
     def crawl(self):
         def _crawl(_spider):
-            def f(_q):
-                try:
-                    _p = CrawlerProcess(self.settings)
-                    _p.crawl(_spider)
-                    _p.start(stop_after_crawl=True)
-                    _q.put(None)
-                except Exception as e:
-                    _q.put(e)
-
             q = Queue()
-            p = Process(target=f, args=(q,))
+            p = Process(target=f, args=(q, self.settings, _spider))
             p.start()
             result = q.get()
             p.join()
@@ -74,20 +81,19 @@ class Crawler(object):
         self.remove_json()
         for spider in self.spiders:
             _crawl(spider)
-            print('.', end='')
+            print('.', end='', flush=True)
         print()
         return
 
     def process_data(self):
         _data = {}
         _name_dict = {}
-        for nd in self.raw_data['name_dict']:
-            _data[nd['hero_name']] = {
-                'name': nd['hero_real_name'],
+        for hero_name in self.name_dict.keys():
+            _data[hero_name] = {
+                'name': self.name_dict[hero_name]['english'],
+                'cn_name': self.name_dict[hero_name]['schinese'],
             }
-            _name_dict[nd['hero_real_name']] = nd['hero_name']
-        for nd in self.raw_data['cn_name_dict']:
-            _data[nd['hero_name']]['cn_name'] = nd['hero_real_name']
+            _name_dict[self.name_dict[hero_name]['english']] = hero_name
         for wr in self.raw_data['win_rate']:
             cfg = list(wr.keys())
             cfg.remove('hero_name')
@@ -129,8 +135,10 @@ class Crawler(object):
                         if tm in _data[h]['counters']['work_well']:
                             _data[h][c_key][tm] += 5.0
                             _data[h][c_key][tm] = round(_data[h][c_key][tm], 2)
-        with open(self.data_path + '/data.pkl', 'wb') as f:
-            pickle.dump(_data, f)
+        for hero_name in self.name_dict.keys():
+            _data[hero_name]['role'] = self.hero_role[hero_name]
+        with codecs.open(self.data_path + '/web_data.json', 'w') as f:
+            json.dump(_data, f)
 
     def run(self):
         original_cwd = os.getcwd()

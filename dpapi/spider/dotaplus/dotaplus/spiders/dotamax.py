@@ -1,7 +1,9 @@
+from dpapi.util.cfg import load_custom_config
+from dpapi.util.util import get_path
+import codecs
 import scrapy
-from data.cfg import DotamaxCfg
-from data import CUSTOM_DATA
 import copy
+import json
 
 
 class NameDictSpider(scrapy.Spider):
@@ -89,9 +91,10 @@ class WinRateSpider(scrapy.Spider):
                 'hero_name': hero_name,
                 'win_rate_all_all_all': float(_wr)
             }
-        for server in DotamaxCfg.Server:
-            for skill in DotamaxCfg.Skill:
-                for ladder in DotamaxCfg.Ladder:
+        dotamax_cfg = load_custom_config()['Dotamax']
+        for server in dotamax_cfg['Server']:
+            for skill in dotamax_cfg['Skill']:
+                for ladder in dotamax_cfg['Ladder']:
                     if server == skill == ladder == 'all':
                         continue
                     url = '/hero/rate/?server={}&skill={}&ladder={}'. \
@@ -131,18 +134,25 @@ class MatchUpsSpider(scrapy.Spider):
         'FEED_URI': 'match_ups_raw.json'
     }
 
+    def __init__(self, *args, **kwargs):
+        super(MatchUpsSpider, self).__init__(*args, **kwargs)
+        nd = get_path('data/generated', parent=True) + '/name_dict.json'
+        with codecs.open(nd) as f:
+            self.name_dict = json.load(f)
+
     def parse(self, response):
         hero = response.css(
             'body > div.maxtopbar > div.main-shadow-box > '
             'div.main-container > div.container.xuning-box > '
             'table > tbody > tr::attr(onclick)').extract()
+        dotamax_cfg = load_custom_config()['Dotamax']
         for idx, h in enumerate(hero):
             url = h.replace('DoNav(\'', '').replace('\')', '')
             hero_name = url.replace('/hero/detail/', '')
             anti_url = '/hero/detail/match_up_anti/{}/'.format(hero_name)
-            for server in DotamaxCfg.Server[0:]:
-                for skill in DotamaxCfg.Skill[0:]:
-                    for ladder in DotamaxCfg.Ladder[0:]:
+            for server in dotamax_cfg['Server']:
+                for skill in dotamax_cfg['Skill']:
+                    for ladder in dotamax_cfg['Ladder']:
                         cfg_url = '?server={}&skill={}&ladder={}'. \
                             format(server, skill, ladder)
                         request = response.follow(
@@ -164,7 +174,7 @@ class MatchUpsSpider(scrapy.Spider):
             'div.main-container > div.container.xuning-box > '
             'table > tbody > tr > td:nth-child(1) > '
             'a::attr(href)').extract()
-        hero_list = copy.deepcopy(CUSTOM_DATA['cn_layout'])
+        hero_list = copy.deepcopy(list(self.name_dict.keys()))
         match_ups = {}
         for idx, h in enumerate(anti_hero):
             anti_hero_name = h.replace('/hero/detail/', '')
@@ -187,18 +197,25 @@ class TeammatesSpider(scrapy.Spider):
         'FEED_URI': 'teammates_raw.json'
     }
 
+    def __init__(self, *args, **kwargs):
+        super(TeammatesSpider, self).__init__(*args, **kwargs)
+        nd = get_path('data/generated', parent=True) + '/name_dict.json'
+        with codecs.open(nd) as f:
+            self.name_dict = json.load(f)
+
     def parse(self, response):
         hero = response.css(
             'body > div.maxtopbar > div.main-shadow-box > '
             'div.main-container > div.container.xuning-box > '
             'table > tbody > tr::attr(onclick)').extract()
+        dotamax_cfg = load_custom_config()['Dotamax']
         for idx, h in enumerate(hero):
             url = h.replace('DoNav(\'', '').replace('\')', '')
             hero_name = url.replace('/hero/detail/', '')
             comb_url = '/hero/detail/match_up_comb/{}/'.format(hero_name)
-            for server in DotamaxCfg.Server[0:]:
-                for skill in DotamaxCfg.Skill[0:]:
-                    for ladder in DotamaxCfg.Ladder[0:]:
+            for server in dotamax_cfg['Server']:
+                for skill in dotamax_cfg['Skill']:
+                    for ladder in dotamax_cfg['Ladder']:
                         cfg_url = '?server={}&skill={}&ladder={}'. \
                             format(server, skill, ladder)
                         request = response.follow(
@@ -220,7 +237,7 @@ class TeammatesSpider(scrapy.Spider):
             'div.main-container > div.container.xuning-box > '
             'table > tbody > tr > td:nth-child(1) > '
             'a::attr(href)').extract()
-        hero_list = copy.deepcopy(CUSTOM_DATA['cn_layout'])
+        hero_list = copy.deepcopy(list(self.name_dict.keys()))
         teammates = {}
         for idx, h in enumerate(coop_hero):
             coop_hero_name = h.replace('/hero/detail/', '')

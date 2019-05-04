@@ -1,0 +1,20 @@
+{
+  "Dotamax": {
+    "Server": [
+      "all",
+      "cn",
+      "world"
+    ],
+    "Skill": [
+      "all",
+      "vh",
+      "h",
+      "n"
+    ],
+    "Ladder": [
+      "all",
+      "y",
+      "n"
+    ]
+  }
+}
